@@ -1,0 +1,52 @@
+{% extends "layouts/app.html" %}
+{% from "components/macros.html" import icon %}
+
+{% block page_title %}Account &amp; security{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+{% set user = current_user() %}
+<section class="card card--stack" aria-labelledby="profile-heading">
+    <div class="profile">
+        <span class="avatar avatar--lg" aria-hidden="true">{{ user.display_name[:1]|upper }}</span>
+        <div>
+            <h2 id="profile-heading">{{ user.display_name }}</h2>
+            <p class="muted small">{{ user.email }}</p>
+        </div>
+    </div>
+    <dl class="meta">
+        <dt>Password</dt>
+        <dd>{{ "Set" if user.password_hash else "Not set (passkey only)" }}</dd>
+    </dl>
+    <div class="btn-group">
+        <button id="logout-all-button" class="btn btn--secondary" type="button">{{ icon("log-out") }}Sign out everywhere</button>
+    </div>
+</section>
+
+<section class="card card--stack" aria-labelledby="passkeys-heading">
+    <div>
+        <h2 id="passkeys-heading">Passkeys</h2>
+        <p class="muted small">Sign in with your device's fingerprint, face or PIN instead of a password. Your browser performs the check; this site never sees it.</p>
+    </div>
+
+    <div class="alert alert--warning" id="passkey-origin-notice" hidden>{{ icon("alert-triangle") }}<span></span></div>
+    <div class="alert alert--warning" id="passkey-unsupported" hidden>{{ icon("alert-triangle") }}<span>This browser or device can't use passkeys here. Your password keeps working.</span></div>
+
+    <div id="passkey-list-region" aria-live="polite"></div>
+
+    <div class="field">
+        <label class="field__label" for="passkey-nickname">Add a passkey</label>
+        <div class="input-group">
+            <input class="input" id="passkey-nickname" type="text" maxlength="100" placeholder="Name it, e.g. Work laptop" autocomplete="off">
+            <button id="add-passkey-button" class="btn btn--primary" type="button">{{ icon("plus") }}Add passkey</button>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/pages/account.js') }}"></script>
+{% endblock %}

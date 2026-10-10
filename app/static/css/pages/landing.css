@@ -1,0 +1,107 @@
+.hero {
+    padding-block: var(--space-8) var(--space-7);
+    text-align: center;
+    background-image: radial-gradient(ellipse 70% 65% at 50% 0%, var(--color-primary-soft), transparent);
+}
+
+.hero__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-5);
+}
+
+.hero__title {
+    max-width: 18ch;
+    font-size: var(--text-3xl);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+}
+
+.hero__lead {
+    max-width: 38rem;
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+}
+
+.section-heading {
+    margin-bottom: var(--space-5);
+    font-size: var(--text-xl);
+    text-align: center;
+}
+
+.features,
+.steps {
+    padding-bottom: var(--space-7);
+}
+
+.features__grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.feature {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+}
+
+.feature__icon {
+    display: grid;
+    place-items: center;
+    width: var(--control-lg);
+    height: var(--control-lg);
+    border-radius: var(--radius-md);
+    background: var(--color-primary-soft);
+    color: var(--color-primary-text);
+    font-size: var(--text-xl);
+}
+
+.feature p,
+.steps__list p {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.steps__list {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.steps__list li {
+    display: flex;
+    gap: var(--space-4);
+}
+
+.steps__number {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: var(--control-md);
+    height: var(--control-md);
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-weight: var(--weight-bold);
+}
+
+.cta {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-8);
+    padding: var(--space-7) var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-primary-soft);
+    text-align: center;
+}
+
+.cta p {
+    max-width: 32rem;
+    color: var(--color-text-muted);
+}

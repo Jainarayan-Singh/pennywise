@@ -1,0 +1,28 @@
+{% extends "layouts/public.html" %}
+{% from "components/macros.html" import icon %}
+
+{% block title %}Page not found · {{ app_name }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/not-found.css') }}">
+{% endblock %}
+
+{% block content %}
+<main id="main-content" class="not-found">
+    <div class="container not-found__inner">
+        <p class="not-found__code" aria-hidden="true">
+            <span>4</span><span class="not-found__zero">0</span><span>4</span>
+        </p>
+        <h1 class="not-found__title">Page not found</h1>
+        <p class="not-found__text">The page you're looking for doesn't exist or may have moved.</p>
+        <div class="btn-group not-found__actions">
+            <a class="btn btn--primary btn--lg" href="{{ url_for('main.landing') }}">{{ icon("home") }}Back to Home</a>
+            <button class="btn btn--secondary btn--lg" type="button" data-go-back hidden>Go back</button>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/pages/not-found.js') }}"></script>
+{% endblock %}

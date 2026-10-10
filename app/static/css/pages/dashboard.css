@@ -1,0 +1,510 @@
+#dashboard-content {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.list-heading {
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.list-heading a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+}
+
+/* Toolbar and layout */
+
+.dash-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+}
+
+.dash-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.dash-filters .field {
+    min-width: 11rem;
+}
+
+/* Two by two until the content is wide enough for all four tiles in a row (never three and an orphan). */
+.dash-stats {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 80rem) {
+    .dash-stats {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 36rem) {
+    .dash-stats {
+        gap: var(--space-3);
+    }
+
+    .stat-tile {
+        padding: var(--space-4);
+    }
+
+    .dash-filters,
+    .dash-filters .field {
+        width: 100%;
+    }
+}
+
+.dash-grid {
+    display: grid;
+    gap: var(--space-4);
+    align-items: stretch;
+}
+
+.dash-grid--wide {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+}
+
+.dash-grid--even {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 63.99rem) {
+    .dash-grid--wide,
+    .dash-grid--even {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Summary tiles */
+
+.stat-tile {
+    --tile: var(--color-primary);
+    container-type: inline-size; /* the figure below is sized from the tile's own width */
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    background:
+        linear-gradient(155deg, color-mix(in srgb, var(--tile) 13%, transparent), transparent 62%),
+        var(--color-surface);
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+    animation: rise 600ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+.stat-tile:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--tile) 45%, var(--color-border));
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-tile--income { --tile: var(--chart-income); }
+.stat-tile--expense { --tile: var(--chart-expense); }
+.stat-tile--savings { --tile: var(--chart-savings); }
+
+.stat-tile__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.stat-tile__icon {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--tile) 18%, transparent);
+    color: var(--tile);
+}
+
+.stat-tile__label {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+}
+
+.stat-tile__value {
+    margin: var(--space-1) 0 0;
+    /* About 12 characters (e.g. ₹2,26,830.00) always fit the tile on one line, from 320px phones to desktop. */
+    font-size: clamp(0.95rem, 12.5cqi, 1.75rem);
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+}
+
+.stat-tile__value.is-negative {
+    color: var(--chart-expense);
+}
+
+.stat-tile__note {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+}
+
+.stat-tile__note.is-good { color: var(--color-success); }
+.stat-tile__note.is-bad { color: var(--color-danger); }
+
+/* Chart cards */
+
+.chart-card {
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+    min-width: 0;
+}
+
+.chart-card__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+}
+
+.chart-card__head h2 {
+    margin: 0;
+    font-size: var(--text-lg);
+}
+
+.chart-card__head p {
+    margin: var(--space-1) 0 0;
+}
+
+.chart-host {
+    min-width: 0;
+    min-height: 12rem;
+}
+
+.chart {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.chart:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 4px;
+    border-radius: var(--radius-md);
+}
+
+.chart__grid {
+    stroke: var(--color-border);
+    stroke-dasharray: 3 5;
+}
+
+.chart__label {
+    fill: var(--color-text-muted);
+    font-size: 11px;
+}
+
+.chart__hit {
+    fill: transparent;
+    transition: fill var(--transition-fast);
+}
+
+.chart__group {
+    cursor: default;
+    outline: none;
+}
+
+.chart__group:hover .chart__hit,
+.chart__group:focus-visible .chart__hit {
+    fill: color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+
+.chart__group:focus-visible .chart__hit {
+    stroke: var(--color-focus);
+    stroke-width: 2;
+    rx: 6;
+}
+
+.chart__bar {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: bar-grow 700ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+.chart__bar--income { fill: var(--chart-income); }
+.chart__bar--expense { fill: var(--chart-expense); }
+
+.chart__line {
+    fill: none;
+    stroke: var(--chart-expense);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.chart__stop {
+    stop-color: var(--chart-expense);
+}
+
+.chart__line,
+.chart__area {
+    animation: reveal 1000ms cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+.chart__guide {
+    stroke: var(--color-border-strong);
+    stroke-dasharray: 3 3;
+}
+
+.chart__dot {
+    fill: var(--color-surface);
+    stroke: var(--chart-expense);
+    stroke-width: 2.5;
+}
+
+.chart--static .chart__bar,
+.chart--static .chart__line,
+.chart--static .chart__area {
+    animation: none;
+}
+
+/* Donut and legend */
+
+.donut {
+    display: grid;
+    grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: center;
+}
+
+@media (max-width: 36rem) {
+    .donut {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+    }
+
+    .donut .legend {
+        width: 100%;
+    }
+}
+
+.donut__ring {
+    position: relative;
+    width: 100%;
+    max-width: 11rem;
+    aspect-ratio: 1;
+}
+
+.donut__svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    overflow: visible;
+}
+
+.donut__track,
+.donut__slice {
+    fill: none;
+    stroke-width: 14;
+}
+
+.donut__track {
+    stroke: var(--color-surface-sunken);
+}
+
+.donut__slice {
+    stroke: var(--slice);
+    cursor: pointer;
+    outline: none;
+    transition: opacity var(--transition-base), stroke-width var(--transition-fast);
+    animation: donut-draw 900ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+.donut--active .donut__slice:not(.is-hover) {
+    opacity: 0.3;
+}
+
+.donut__slice.is-hover,
+.donut__slice:focus-visible {
+    stroke-width: 17;
+}
+
+.donut__centre {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    padding: 22%;
+    text-align: center;
+    pointer-events: none;
+}
+
+.donut__centre span {
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+}
+
+.donut__centre strong {
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+}
+
+.chart-cat-1 { --slice: var(--chart-cat-1); }
+.chart-cat-2 { --slice: var(--chart-cat-2); }
+.chart-cat-3 { --slice: var(--chart-cat-3); }
+.chart-cat-4 { --slice: var(--chart-cat-4); }
+.chart-cat-5 { --slice: var(--chart-cat-5); }
+.chart-cat-6 { --slice: var(--chart-cat-6); }
+
+.legend {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.legend__item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    transition: background-color var(--transition-fast);
+}
+
+.legend__item.is-hover {
+    background: var(--color-surface-sunken);
+}
+
+.legend__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.legend__share {
+    color: var(--color-text-muted);
+}
+
+.legend__amount {
+    min-width: 5.5rem;
+    font-weight: var(--weight-semibold);
+    text-align: right;
+}
+
+.legend--inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+
+.legend--inline .legend__item {
+    display: inline-flex;
+    gap: var(--space-2);
+    padding: 0;
+    color: var(--color-text-muted);
+}
+
+.swatch {
+    display: inline-block;
+    flex: none;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: var(--radius-full);
+}
+
+.swatch--income { background: var(--chart-income); }
+.swatch--expense { background: var(--chart-expense); }
+.swatch--savings { background: var(--chart-savings); }
+.swatch--cat { background: var(--slice); }
+
+/* Tooltip (one shared element, placed by charts.js) */
+
+.chart-tip {
+    position: fixed;
+    top: var(--tip-y, 0);
+    left: var(--tip-x, 0);
+    z-index: var(--z-overlay);
+    display: grid;
+    gap: var(--space-1);
+    min-width: 9rem;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-lg);
+    font-size: var(--text-sm);
+    pointer-events: none;
+}
+
+.chart-tip__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.chart-tip__row b {
+    margin-left: auto;
+    padding-left: var(--space-3);
+}
+
+/* Recent transactions */
+
+.activity {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.activity li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.activity li:last-child {
+    border-bottom: 0;
+}
+
+.activity li > div {
+    display: grid;
+    min-width: 0;
+}
+
+.activity strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Motion (the global reduced-motion rule shortens all of these to nothing) */
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+}
+
+@keyframes bar-grow {
+    from { transform: scaleY(0); }
+}
+
+@keyframes reveal {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 -4px 0 0); }
+}
+
+@keyframes donut-draw {
+    from { stroke-dasharray: 0 100; }
+}

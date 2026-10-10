@@ -1,0 +1,16 @@
+{% from "components/macros.html" import icon %}
+<div class="menu" data-menu>
+    <button class="menu__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="user-menu" data-menu-trigger>
+        <span class="avatar" aria-hidden="true">{{ user.display_name[:1]|upper }}</span>
+        <span class="menu__label">{{ user.display_name }}</span>
+        {{ icon("chevron", "icon--chevron") }}
+    </button>
+    <div class="menu__panel" id="user-menu" role="menu" aria-label="Account" hidden data-menu-panel>
+        <div class="menu__header">
+            <strong>{{ user.display_name }}</strong>
+            <span class="muted small">{{ user.email }}</span>
+        </div>
+        <a class="menu__item" role="menuitem" href="{{ url_for('auth_pages.account_page') }}">{{ icon("user") }}Account &amp; security</a>
+        <button class="menu__item menu__item--danger" role="menuitem" type="button" data-action="sign-out">{{ icon("log-out") }}Sign out</button>
+    </div>
+</div>

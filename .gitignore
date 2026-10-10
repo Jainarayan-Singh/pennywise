@@ -1,0 +1,44 @@
+# Secrets / local config
+.env
+.env.*
+!.env.example
+instance/
+*.local.json
+
+# Virtual environments
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Logs, uploads, temp
+*.log
+logs/
+uploads/
+tmp/
+*.tmp
+
+# Database dumps (may contain personal data)
+*.sql
+*.dump
+*.bak
+*.sqlite
+*.sqlite3
+*.db
+
+# IDE / OS
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store
+
+# testing folder
+test/

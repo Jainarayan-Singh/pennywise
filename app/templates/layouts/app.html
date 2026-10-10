@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "components/macros.html" import icon %}
+
+{% block title %}{{ self.page_title() }} · {{ app_name }}{% endblock %}
+{% block body_attrs %}data-authenticated{% endblock %}
+
+{% block layout %}
+{% set user = current_user() %}
+<div class="app-shell">
+    {% include "components/sidebar.html" %}
+    <div class="app-main">
+        <header class="topbar">
+            <button class="btn btn--ghost btn--icon topbar__menu" type="button" data-nav-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">{{ icon("menu") }}</button>
+            <h1 class="topbar__title">{% block page_title %}{% endblock %}</h1>
+            <div class="topbar__actions">
+                {% block page_actions %}{% endblock %}
+                <button class="btn btn--ghost btn--icon" type="button" data-theme-toggle data-tooltip="Switch theme" data-tooltip-align="end" aria-label="Switch theme">
+                    {{ icon("moon", "theme-icon--moon") }}{{ icon("sun", "theme-icon--sun") }}
+                </button>
+                {% include "components/user_menu.html" %}
+            </div>
+        </header>
+        <main id="main-content" class="app-content" {% block main_attrs %}{% endblock %}>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+<div class="drawer-backdrop" data-drawer-backdrop></div>
+{% endblock %}

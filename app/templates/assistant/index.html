@@ -1,0 +1,125 @@
+{% extends "layouts/app.html" %}
+{% from "components/macros.html" import icon, select_field, date_field, form_dialog %}
+
+{% block page_title %}Quick add{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/assistant.css') }}">
+{% endblock %}
+
+{% block page_actions %}
+<a class="btn btn--secondary" href="{{ url_for('finance_pages.transactions_page', new=1) }}" aria-label="Add manually instead">{{ icon("pencil") }}<span class="btn__label">Add manually instead</span></a>
+{% endblock %}
+
+{% block main_attrs %}data-today="{{ today }}" data-currency="{{ currency }}" data-locale="{{ locale }}" data-voice="{{ 'true' if voice_enabled else 'false' }}" data-max-audio="{{ max_audio_seconds }}"{% endblock %}
+
+{% block content %}
+<p class="page-intro">Describe an expense or income in your own words. Nothing is saved until you review and confirm it.</p>
+
+{% if not enabled %}
+<div class="card"><div class="state">
+    <span class="state__icon">{{ icon("alert-triangle") }}</span>
+    <h3>The AI assistant isn't configured</h3>
+    <p class="state__text">Set <code>AI_API_KEY</code> and <code>AI_TEXT_MODEL</code> in <code>.env</code> and restart. Adding transactions manually keeps working.</p>
+</div></div>
+{% else %}
+
+<section class="card assistant" aria-label="Conversation">
+    <div id="conversation" class="conversation" role="log" aria-live="polite">
+        <div class="bubble bubble--assistant">Tell me what you spent or earned, for example “Yesterday I paid 1200 for petrol”. I'll ask only for what's missing.</div>
+    </div>
+
+    {% if voice_enabled %}
+    <div id="recorder" class="recorder" hidden>
+        <span class="rec-dot" aria-hidden="true"></span>
+        <span id="recorder-time" class="recorder__time" aria-hidden="true">0:00</span>
+        <div class="btn-group">
+            <button id="recorder-stop" class="btn btn--primary btn--sm" type="button">{{ icon("square") }}Stop and use</button>
+            <button id="recorder-cancel" class="btn btn--ghost btn--sm" type="button">Cancel</button>
+        </div>
+    </div>
+    <p id="voice-status" class="visually-hidden" role="status"></p>
+    {% endif %}
+
+    <form id="composer" class="composer" novalidate>
+        <label class="visually-hidden" for="composer-text">Describe an expense or income</label>
+        <textarea class="textarea" id="composer-text" name="text" rows="3" maxlength="{{ max_chars }}"
+                  placeholder="e.g. Today I spent 250 rupees on lunch" autocomplete="off"></textarea>
+        <div class="composer__bar">
+            <span class="composer__hint">Enter to send · Shift+Enter for a new line</span>
+            <div class="composer__actions">
+                {% if voice_enabled %}
+                <button id="mic-button" class="btn btn--ghost btn--icon" type="button"
+                        aria-label="Speak instead of typing" data-tooltip="Speak instead of typing" data-tooltip-align="end">{{ icon("mic") }}</button>
+                {% endif %}
+                <button id="send-button" class="btn btn--primary" type="submit">{{ icon("plus") }}Send</button>
+            </div>
+        </div>
+    </form>
+    <div class="chips" aria-label="Examples">
+        <span class="chips__label">Try</span>
+        <button class="chip" type="button" data-example="Today I spent 250 rupees on lunch">Today I spent 250 rupees on lunch</button>
+        <button class="chip" type="button" data-example="Yesterday I paid 1200 for petrol">Yesterday I paid 1200 for petrol</button>
+        <button class="chip" type="button" data-example="Kal 350 rupaye chai aur snacks pe kharch kiye">Kal 350 rupaye chai aur snacks pe kharch kiye</button>
+    </div>
+</section>
+
+<section id="draft-card" class="card card--stack" aria-labelledby="draft-heading" hidden>
+    <div class="section-title">
+        <h2 id="draft-heading">Review before saving</h2>
+        <span id="draft-status" class="badge"></span>
+    </div>
+    <dl id="draft-rows" class="draft-rows"></dl>
+    <p id="draft-hint" class="muted small" hidden></p>
+    <div class="btn-group">
+        <button id="confirm-button" class="btn btn--primary" type="button">Confirm &amp; save</button>
+        <button id="edit-button" class="btn btn--secondary" type="button">{{ icon("pencil") }}Edit details</button>
+        <button id="discard-button" class="btn btn--danger-ghost" type="button">{{ icon("trash") }}Discard</button>
+    </div>
+</section>
+
+<section id="saved-card" class="card" hidden aria-live="polite"></section>
+
+{% call form_dialog("draft-edit-dialog", "Edit details", submit_label="Save changes", size="modal--wide") %}
+    <div class="field">
+        <span class="field__label" id="edit-type-label">Type</span>
+        <div class="segmented segmented--block" role="radiogroup" aria-labelledby="edit-type-label">
+            <label class="segmented__option"><input type="radio" name="transaction_type" value="expense"><span>Expense</span></label>
+            <label class="segmented__option"><input type="radio" name="transaction_type" value="income"><span>Income</span></label>
+        </div>
+        <small class="field__error" data-error-for="transaction_type"></small>
+    </div>
+    <div class="form-grid">
+        <div class="field">
+            <label class="field__label" for="edit-amount">Amount</label>
+            <div class="input-group">
+                <span class="input-group__addon" id="edit-currency">{{ currency }}</span>
+                <input class="input" id="edit-amount" name="amount" type="text" inputmode="decimal" autocomplete="off" aria-describedby="edit-amount-error">
+            </div>
+            <small class="field__error" id="edit-amount-error" data-error-for="amount"></small>
+        </div>
+        {{ date_field("edit-date", "transaction_date", "Date", min=min_date, max=today, today=today, locale=locale) }}
+        {% call select_field("edit-category", "category_id", "Category") %}<option value="">Uncategorised</option>{% endcall %}
+        {% call select_field("edit-account", "account_id", "Account") %}<option value="">No account</option>{% endcall %}
+        {% call select_field("edit-payment", "payment_method", "Payment method") %}
+            <option value="">Not specified</option>
+            {% for method in payment_methods %}<option value="{{ method }}">{{ method.replace('_', ' ').capitalize() }}</option>{% endfor %}
+        {% endcall %}
+        <div class="field">
+            <label class="field__label" for="edit-merchant">Merchant</label>
+            <input class="input" id="edit-merchant" name="merchant" type="text" maxlength="120" autocomplete="off" aria-describedby="edit-merchant-error">
+            <small class="field__error" id="edit-merchant-error" data-error-for="merchant"></small>
+        </div>
+    </div>
+    <div class="field">
+        <label class="field__label" for="edit-description">Description</label>
+        <input class="input" id="edit-description" name="description" type="text" maxlength="255" autocomplete="off" aria-describedby="edit-description-error">
+        <small class="field__error" id="edit-description-error" data-error-for="description"></small>
+    </div>
+{% endcall %}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if enabled %}<script type="module" src="{{ url_for('static', filename='js/pages/assistant.js') }}"></script>{% endif %}
+{% endblock %}

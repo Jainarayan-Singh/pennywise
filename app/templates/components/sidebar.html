@@ -1,0 +1,35 @@
+{% from "components/macros.html" import icon, brand_logo %}
+{% set endpoint = request.endpoint %}
+<aside class="sidebar" id="sidebar" aria-label="Main">
+    <div class="sidebar__brand">
+        <a class="brand" href="{{ url_for('finance_pages.dashboard_page') }}">
+            {{ brand_logo() }}
+            <span class="brand-name">{{ app_name }}</span>
+        </a>
+        <button class="btn btn--ghost btn--icon btn--sm sidebar__collapse" type="button" data-sidebar-toggle aria-expanded="true" aria-controls="sidebar" aria-label="Collapse sidebar" data-label="Collapse sidebar">{{ icon("panel-left") }}</button>
+        <button class="btn btn--ghost btn--icon btn--sm sidebar__close" type="button" data-nav-toggle aria-label="Close navigation">{{ icon("x") }}</button>
+    </div>
+
+    <nav aria-label="Primary">
+        <ul class="sidebar__nav">
+            <li><a class="nav-item" data-label="Dashboard" href="{{ url_for('finance_pages.dashboard_page') }}" {% if endpoint == 'finance_pages.dashboard_page' %}aria-current="page"{% endif %}>{{ icon("layout") }}<span class="nav-item__label">Dashboard</span></a></li>
+            <li><a class="nav-item" data-label="Transactions" href="{{ url_for('finance_pages.transactions_page') }}" {% if endpoint == 'finance_pages.transactions_page' %}aria-current="page"{% endif %}>{{ icon("list") }}<span class="nav-item__label">Transactions</span></a></li>
+            {% if ai_enabled %}
+            <li><a class="nav-item" data-label="Quick add" href="{{ url_for('ai_pages.assistant_page') }}" {% if endpoint == 'ai_pages.assistant_page' %}aria-current="page"{% endif %}>{{ icon("sparkles") }}<span class="nav-item__label">Quick add</span></a></li>
+            {% endif %}
+            <li><a class="nav-item" data-label="Categories &amp; accounts" href="{{ url_for('finance_pages.manage_page') }}" {% if endpoint == 'finance_pages.manage_page' %}aria-current="page"{% endif %}>{{ icon("tag") }}<span class="nav-item__label">Categories &amp; accounts</span></a></li>
+            <li><a class="nav-item" data-label="Account &amp; security" href="{{ url_for('auth_pages.account_page') }}" {% if endpoint == 'auth_pages.account_page' %}aria-current="page"{% endif %}>{{ icon("user") }}<span class="nav-item__label">Account &amp; security</span></a></li>
+        </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+        <div class="sidebar__user">
+            <span class="avatar" aria-hidden="true">{{ user.display_name[:1]|upper }}</span>
+            <div class="sidebar__user-text">
+                <strong>{{ user.display_name }}</strong>
+                <span class="muted small">{{ user.email }}</span>
+            </div>
+        </div>
+        <button class="btn btn--secondary btn--block" type="button" data-action="sign-out" data-label="Sign out">{{ icon("log-out") }}<span class="nav-item__label">Sign out</span></button>
+    </div>
+</aside>

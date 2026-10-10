@@ -1,0 +1,91 @@
+.not-found {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: calc(100dvh - var(--header-height) - 6rem);
+    padding-block: var(--space-6);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.not-found::before {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    z-index: -1;
+    width: min(38rem, 90vw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--color-primary-soft), transparent);
+    transform: translate(-50%, -55%);
+    animation: not-found-glow 6s ease-in-out infinite;
+}
+
+.not-found__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+    text-align: center;
+}
+
+.not-found__code {
+    display: flex;
+    gap: 0.05em;
+    margin: 0;
+    font-size: clamp(6rem, 24vw, 12rem);
+    font-weight: var(--weight-bold);
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.not-found__code span {
+    background: linear-gradient(160deg, var(--color-primary-hover), var(--color-primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: not-found-rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+.not-found__code span:nth-child(2) {
+    animation-delay: 90ms;
+}
+
+.not-found__code span:nth-child(3) {
+    animation-delay: 180ms;
+}
+
+.not-found__zero {
+    display: inline-block;
+    animation: not-found-rise 700ms 90ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards, not-found-float 5s 800ms ease-in-out infinite;
+}
+
+.not-found__title {
+    margin: 0;
+    font-size: var(--text-2xl);
+    animation: not-found-rise 700ms 240ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+.not-found__text {
+    max-width: 28rem;
+    margin: 0;
+    color: var(--color-text-muted);
+    animation: not-found-rise 700ms 320ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+.not-found__actions {
+    justify-content: center;
+    margin-top: var(--space-3);
+    animation: not-found-rise 700ms 400ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+@keyframes not-found-rise {
+    from { opacity: 0; transform: translateY(14px); }
+}
+
+@keyframes not-found-float {
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes not-found-glow {
+    50% { opacity: 0.6; transform: translate(-50%, -55%) scale(1.06); }
+}

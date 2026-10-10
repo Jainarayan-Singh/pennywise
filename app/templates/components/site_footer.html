@@ -1,0 +1,8 @@
+<footer class="site-footer">
+    <div class="container site-footer__inner">
+        <span>&copy; {{ copyright_year }} <span class="brand-name">{{ app_name }}</span></span>
+        {% if not is_production %}
+        <a href="{{ url_for('main.diagnostics') }}">Diagnostics (development only)</a>
+        {% endif %}
+    </div>
+</footer>

@@ -1,0 +1,89 @@
+{% extends "layouts/app.html" %}
+{% from "components/macros.html" import icon, select_field %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+{% endblock %}
+
+{% block page_actions %}
+<a class="btn btn--primary" href="{{ url_for('finance_pages.transactions_page', new=1) }}" aria-label="Add transaction">{{ icon("plus") }}<span class="btn__label">Add transaction</span></a>
+{% endblock %}
+
+{% block main_attrs %}data-currency="{{ currency }}" data-locale="{{ locale }}"{% endblock %}
+
+{% block content %}
+<div id="dashboard-empty" hidden></div>
+
+<div id="dashboard-content">
+    <div class="dash-toolbar">
+        <p class="page-intro" id="dashboard-intro">Your income and spending at a glance.</p>
+        <div class="dash-filters">
+            {% call select_field("dashboard-range", "range", "Period", searchable=False) %}
+            <option value="this_month">This month</option>
+            <option value="previous_month">Last month</option>
+            <option value="last_3_months">Last 3 months</option>
+            <option value="last_6_months">Last 6 months</option>
+            <option value="this_year">This year</option>
+            <option value="last_12_months">Last 12 months</option>
+            {% endcall %}
+            <div id="dashboard-currency-field" hidden>
+                {% call select_field("dashboard-currency", "currency", "Currency", searchable=False) %}{% endcall %}
+            </div>
+        </div>
+    </div>
+
+    <section class="dash-stats" id="dashboard-stats" aria-label="Summary"></section>
+
+    <div class="dash-grid dash-grid--wide">
+        <section class="card chart-card" aria-labelledby="bars-heading">
+            <header class="chart-card__head">
+                <div>
+                    <h2 id="bars-heading">Income vs expenses</h2>
+                    <p class="muted small">What came in and what went out, month by month.</p>
+                </div>
+                <ul class="legend legend--inline" aria-label="Legend">
+                    <li class="legend__item"><i class="swatch swatch--income"></i>Income</li>
+                    <li class="legend__item"><i class="swatch swatch--expense"></i>Expenses</li>
+                </ul>
+            </header>
+            <div id="chart-bars" class="chart-host" aria-live="polite"></div>
+        </section>
+
+        <section class="card chart-card" aria-labelledby="donut-heading">
+            <header class="chart-card__head">
+                <div>
+                    <h2 id="donut-heading">Where your money went</h2>
+                    <p class="muted small" id="donut-sub">Spending by category.</p>
+                </div>
+            </header>
+            <div id="chart-donut" class="chart-host" aria-live="polite"></div>
+        </section>
+    </div>
+
+    <div class="dash-grid dash-grid--even">
+        <section class="card chart-card" aria-labelledby="trend-heading">
+            <header class="chart-card__head">
+                <div>
+                    <h2 id="trend-heading">Spending trend</h2>
+                    <p class="muted small" id="trend-sub">How much you spent over time.</p>
+                </div>
+            </header>
+            <div id="chart-trend" class="chart-host" aria-live="polite"></div>
+        </section>
+
+        <section class="card card--flush" aria-labelledby="recent-heading">
+            <div class="section-title list-heading">
+                <h2 id="recent-heading">Recent transactions</h2>
+                <a href="{{ url_for('finance_pages.transactions_page') }}">View all</a>
+            </div>
+            <div id="recent-list" aria-live="polite"></div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/pages/dashboard.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "layouts/app.html" %}
+{% from "components/macros.html" import icon, select_field, form_dialog %}
+
+{% block page_title %}Categories &amp; accounts{% endblock %}
+
+{% block content %}
+<p class="page-intro">Archive what you no longer use. Past transactions keep their category and account, so history stays accurate.</p>
+
+<section class="card card--stack" aria-labelledby="categories-heading">
+    <div class="section-title">
+        <h2 id="categories-heading">Categories</h2>
+        <label class="switch"><input id="show-archived-categories" type="checkbox" role="switch"><span>Archived only</span></label>
+    </div>
+    <div id="category-lists" aria-live="polite"></div>
+    <form id="category-form" class="toolbar" novalidate>
+        <div class="field">
+            <label class="field__label" for="category-name">New category</label>
+            <input class="input" id="category-name" name="name" type="text" maxlength="60" required autocomplete="off" aria-describedby="category-name-error">
+            <small class="field__error" id="category-name-error" data-error-for="name"></small>
+        </div>
+        {% call select_field("category-kind", "kind", "Kind", searchable=False) %}
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+        {% endcall %}
+        <div class="btn-group"><button class="btn btn--primary" type="submit">{{ icon("plus") }}Add category</button></div>
+    </form>
+</section>
+
+<section class="card card--stack" aria-labelledby="accounts-heading">
+    <div class="section-title">
+        <h2 id="accounts-heading">Accounts</h2>
+        <label class="switch"><input id="show-archived-accounts" type="checkbox" role="switch"><span>Archived only</span></label>
+    </div>
+    <div id="account-list-region" aria-live="polite"></div>
+    <form id="account-form" class="toolbar" novalidate>
+        <div class="field">
+            <label class="field__label" for="account-name">New account</label>
+            <input class="input" id="account-name" name="name" type="text" maxlength="60" required autocomplete="off" aria-describedby="account-name-error">
+            <small class="field__error" id="account-name-error" data-error-for="name"></small>
+        </div>
+        {% call select_field("account-type", "account_type", "Type", searchable=False) %}
+            {% for kind in account_types %}<option value="{{ kind }}">{{ label(kind) }}</option>{% endfor %}
+        {% endcall %}
+        <div class="field">
+            <label class="field__label" for="account-currency">Currency</label>
+            <input class="input" id="account-currency" name="currency" type="text" maxlength="3" value="{{ currency }}" required autocomplete="off" aria-describedby="account-currency-hint account-currency-error">
+            <small class="field__error" id="account-currency-error" data-error-for="currency"></small>
+        </div>
+        <div class="btn-group"><button class="btn btn--primary" type="submit">{{ icon("plus") }}Add account</button></div>
+    </form>
+    <p class="field__hint" id="account-currency-hint">An account's type and currency can't be changed later, because that would reinterpret past transactions.</p>
+</section>
+
+{% call form_dialog("rename-dialog", "Rename", size="modal--sm") %}
+    <div class="field">
+        <label class="field__label" for="rename-input">Name</label>
+        <input class="input" id="rename-input" name="name" type="text" maxlength="60" required autocomplete="off" aria-describedby="rename-error">
+        <small class="field__error" id="rename-error" data-error-for="name"></small>
+    </div>
+{% endcall %}
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/pages/manage.js') }}"></script>
+{% endblock %}

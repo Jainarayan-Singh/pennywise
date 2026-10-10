@@ -1,0 +1,120 @@
+/*
+ * Design tokens. Every colour is declared once with light-dark(), so a single palette serves both
+ * themes: the OS preference by default, or the explicit choice set via <html data-theme>.
+ * Requires a browser with light-dark() support (Chrome/Edge 123+, Safari 17.5+, Firefox 120+).
+ */
+:root {
+    color-scheme: light dark;
+
+    --font-sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-md: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.375rem;
+    --text-2xl: 1.75rem;
+    --text-3xl: clamp(2.25rem, 5vw, 3.5rem);
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+    --leading-tight: 1.2;
+    --leading-normal: 1.55;
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 5rem;
+
+    --radius-sm: 0.375rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 0.875rem;
+    --radius-xl: 1.25rem;
+    --radius-full: 999px;
+
+    --color-bg: light-dark(#f5f6f8, #0a0e13);
+    --color-surface: light-dark(#ffffff, #121820);
+    --color-surface-raised: light-dark(#ffffff, #19212b);
+    --color-surface-sunken: light-dark(#eef0f4, #0e141b);
+    --color-border: light-dark(#e2e5eb, #232c38);
+    --color-border-strong: light-dark(#c4cad5, #384455);
+
+    --color-text: light-dark(#111827, #e9eef5);
+    --color-text-muted: light-dark(#4a5465, #a5b0c0);
+    --color-text-subtle: light-dark(#667085, #8794a8);
+
+    --color-primary: light-dark(#0f766e, #2dd4bf);
+    --color-primary-hover: light-dark(#115e59, #5eead4);
+    --color-primary-soft: light-dark(#e3f3f1, #123331);
+    --color-primary-text: light-dark(#0f766e, #5eead4);
+
+    /* Charts: income emerald, spending coral, savings teal; categories are told apart by hue and legend. */
+    --chart-income: light-dark(#059669, #34d399);
+    --chart-expense: light-dark(#e0524a, #ff7b72);
+    --chart-savings: light-dark(#0d9488, #2dd4bf);
+    --chart-cat-1: light-dark(#0d9488, #2dd4bf);
+    --chart-cat-2: light-dark(#4f46e5, #818cf8);
+    --chart-cat-3: light-dark(#d97706, #fbbf24);
+    --chart-cat-4: light-dark(#db2777, #f472b6);
+    --chart-cat-5: light-dark(#0284c7, #38bdf8);
+    --chart-cat-6: light-dark(#64748b, #94a3b8);
+
+    /* Loading screen: how long the progress animation runs (colours come from the theme tokens). */
+    --splash-duration: 1700ms;
+    --color-on-primary: light-dark(#ffffff, #042f2e);
+
+    --color-success: light-dark(#15803d, #4ade80);
+    --color-success-soft: light-dark(#e6f5ec, #13301f);
+    --color-warning: light-dark(#a15c07, #fbbf24);
+    --color-warning-soft: light-dark(#fcf1d9, #352a0c);
+    --color-danger: light-dark(#b42318, #f87171);
+    --color-danger-hover: light-dark(#912018, #fca5a5);
+    --color-danger-soft: light-dark(#fdeceb, #3b1717);
+    --color-on-danger: light-dark(#ffffff, #2a0a0a);
+    --color-info: light-dark(#1d4ed8, #7cb0ff);
+    --color-info-soft: light-dark(#e7eefc, #15253f);
+
+    --color-focus: light-dark(#0f766e, #5eead4);
+    --color-overlay: light-dark(rgb(15 23 42 / 0.5), rgb(0 0 0 / 0.68));
+
+    --shadow-sm: 0 1px 2px light-dark(rgb(16 24 40 / 0.06), rgb(0 0 0 / 0.45));
+    --shadow-md: 0 6px 16px -4px light-dark(rgb(16 24 40 / 0.1), rgb(0 0 0 / 0.5));
+    --shadow-lg: 0 20px 48px -12px light-dark(rgb(16 24 40 / 0.22), rgb(0 0 0 / 0.7));
+
+    --focus-ring-width: 2px;
+    --focus-ring-offset: 2px;
+
+    --z-header: 100;
+    --z-sidebar: 150;
+    --z-dropdown: 200;
+    --z-modal: 300;
+    --z-toast: 400;
+    --z-overlay: 450;
+    --z-tooltip: 500;
+
+    --transition-fast: 120ms ease;
+    --transition-base: 200ms ease;
+
+    --control-sm: 2rem;
+    --control-md: 2.5rem;
+    --control-lg: 3rem;
+    --header-height: 4rem;
+    --sidebar-width: 16.5rem;
+    --container-max: 72rem;
+    --container-narrow: 28rem;
+    --modal-width: 34rem;
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+}

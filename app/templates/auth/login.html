@@ -1,0 +1,64 @@
+{% extends "layouts/public.html" %}
+{% from "components/macros.html" import field, password_field, icon %}
+
+{% block title %}Sign in · {{ app_name }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<main id="main-content" class="container container--narrow auth-page" data-next="{{ post_login_path }}">
+    <div class="card auth-card">
+        <div class="segmented segmented--block" role="tablist" aria-label="Sign in or create an account" id="auth-tabs">
+            <button type="button" role="tab" id="tab-login" aria-selected="true" aria-controls="login-form" data-panel-target="login">Sign in</button>
+            <button type="button" role="tab" id="tab-register" aria-selected="false" aria-controls="register-form" tabindex="-1" data-panel-target="register">Sign up</button>
+        </div>
+
+        <div class="alert alert--danger" id="auth-alert" role="alert" hidden>{{ icon("alert-circle") }}<span></span></div>
+
+        <form id="login-form" class="form" role="tabpanel" aria-labelledby="tab-login" novalidate>
+            <h2 class="auth-card__title">Welcome back</h2>
+            {{ field("login", "email", "Email", type="email", autocomplete="username") }}
+            {{ password_field("login", "password", "Password", autocomplete="current-password") }}
+            <button class="btn btn--primary btn--lg btn--block" type="submit">Sign in</button>
+            <button class="btn btn--ghost btn--sm" type="button" data-panel-target="forgot">Forgot your password?</button>
+        </form>
+
+        <form id="register-form" class="form" role="tabpanel" aria-labelledby="tab-register" hidden novalidate>
+            <h2 class="auth-card__title">Create your account</h2>
+            <p class="muted small">We'll email you a link to choose your password.</p>
+            <div class="form__row">
+                {{ field("register", "first_name", "First name", autocomplete="given-name", maxlength=50) }}
+                {{ field("register", "last_name", "Last name", autocomplete="family-name", maxlength=50) }}
+            </div>
+            {{ field("register", "email", "Email", type="email", autocomplete="email") }}
+            <button class="btn btn--primary btn--lg btn--block" type="submit">Create account</button>
+        </form>
+
+        <div id="register-done" class="form" role="status" hidden>
+            <h2 class="auth-card__title">Check your email</h2>
+            <p class="muted">If that address can be used, a link to finish creating your account is on its way. It works once and expires after 24 hours.</p>
+            <button class="btn btn--ghost btn--sm" type="button" data-panel-target="login">Back to sign in</button>
+        </div>
+
+        <form id="forgot-form" class="form" hidden novalidate>
+            <h2 class="auth-card__title">Reset your password</h2>
+            <p class="muted small">Enter your email and we will send a single-use reset link.</p>
+            {{ field("forgot", "email", "Email", type="email", autocomplete="username") }}
+            <button class="btn btn--primary btn--lg btn--block" type="submit">Send reset link</button>
+            <button class="btn btn--ghost btn--sm" type="button" data-panel-target="login">Back to sign in</button>
+        </form>
+
+        <div id="passkey-section" class="form" hidden>
+            <div class="divider"><span>or</span></div>
+            <div class="alert alert--warning" id="passkey-origin-notice" hidden>{{ icon("alert-triangle") }}<span></span></div>
+            <button id="passkey-login-button" class="btn btn--secondary btn--lg btn--block" type="button">{{ icon("key") }}Sign in with a passkey</button>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/pages/login.js') }}"></script>
+{% endblock %}

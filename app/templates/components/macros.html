@@ -1,0 +1,93 @@
+{% macro icon(name, class="") -%}
+<svg class="icon {{ class }}" aria-hidden="true" focusable="false"><use href="#i-{{ name }}"></use></svg>
+{%- endmacro %}
+
+{# The brand logo (static/favicon.png); decorative because the app name always sits beside it. #}
+{% macro brand_logo(class="") -%}
+<img class="brand__logo {{ class }}" src="{{ url_for('static', filename='favicon.png') }}" alt="" width="40" height="40">
+{%- endmacro %}
+
+{% macro field(form, name, label, type="text", autocomplete=None, hint=None, required=True, maxlength=None, placeholder=None, inputmode=None) %}
+{% set id = form ~ "-" ~ name %}
+<div class="field">
+    <label class="field__label" for="{{ id }}">{{ label }}</label>
+    <input class="input" id="{{ id }}" name="{{ name }}" type="{{ type }}"
+           {% if required %}required{% endif %}
+           {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+           {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+           {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+           {% if inputmode %}inputmode="{{ inputmode }}"{% endif %}
+           aria-describedby="{{ id }}-error{% if hint %} {{ id }}-hint{% endif %}">
+    {% if hint %}<small class="field__hint" id="{{ id }}-hint">{{ hint }}</small>{% endif %}
+    <small class="field__error" id="{{ id }}-error" data-error-for="{{ name }}"></small>
+</div>
+{% endmacro %}
+
+{% macro password_field(form, name, label, autocomplete, hint=None) %}
+{% set id = form ~ "-" ~ name %}
+<div class="field">
+    <label class="field__label" for="{{ id }}">{{ label }}</label>
+    <div class="input-group">
+        <input class="input" id="{{ id }}" name="{{ name }}" type="password" required autocomplete="{{ autocomplete }}"
+               aria-describedby="{{ id }}-error{% if hint %} {{ id }}-hint{% endif %}">
+        <button class="btn btn--secondary btn--icon" type="button" data-password-toggle="{{ id }}" aria-label="Show password" aria-pressed="false">
+            {{ icon("eye", "icon--show") }}{{ icon("eye-off", "icon--hide") }}
+        </button>
+    </div>
+    {% if hint %}<small class="field__hint" id="{{ id }}-hint">{{ hint }}</small>{% endif %}
+    <small class="field__error" id="{{ id }}-error" data-error-for="{{ name }}"></small>
+</div>
+{% endmacro %}
+
+{# Dropdown: a native <select> enhanced by components/dropdown.js. Options go in the call block. #}
+{% macro select_field(id, name, label, searchable=None) %}
+<div class="field">
+    <label class="field__label" for="{{ id }}">{{ label }}</label>
+    <div class="dropdown">
+        <select class="input" id="{{ id }}" name="{{ name }}" data-dropdown
+                {% if searchable is not none %}data-searchable="{{ 'true' if searchable else 'false' }}"{% endif %}
+                aria-describedby="{{ id }}-error">{{ caller() }}</select>
+    </div>
+    <small class="field__error" id="{{ id }}-error" data-error-for="{{ name }}"></small>
+</div>
+{% endmacro %}
+
+{# Date field: components/datepicker.js turns this into a calendar popup. Value is an ISO date in the hidden input. #}
+{% macro date_field(id, name, label, min=None, max=None, today=None, locale=None, clearable=False, placeholder="Select a date") %}
+<div class="field">
+    <label class="field__label" for="{{ id }}">{{ label }}</label>
+    <div class="datepicker" data-datepicker data-placeholder="{{ placeholder }}"
+         {% if min %}data-min="{{ min }}"{% endif %} {% if max %}data-max="{{ max }}"{% endif %}
+         {% if today %}data-today="{{ today }}"{% endif %} {% if locale %}data-locale="{{ locale }}"{% endif %}
+         {% if clearable %}data-clearable{% endif %}>
+        <input type="hidden" id="{{ id }}" name="{{ name }}">
+        <button class="input datepicker__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-describedby="{{ id }}-error">
+            <span class="datepicker__value" id="{{ id }}-value"></span>{{ icon("calendar") }}
+        </button>
+        {% if clearable %}
+        <button class="btn btn--ghost btn--icon datepicker__clear" type="button" aria-label="Clear {{ label|lower }}" hidden>{{ icon("x") }}</button>
+        {% endif %}
+    </div>
+    <small class="field__error" id="{{ id }}-error" data-error-for="{{ name }}"></small>
+</div>
+{% endmacro %}
+
+{# The one modal used for every form: centred, scrolls inside, Cancel/Save footer. Ids derive from `id`. #}
+{% macro form_dialog(id, title, submit_label="Save", size="") %}
+<dialog id="{{ id }}" class="modal {{ size }}" aria-labelledby="{{ id }}-title">
+    <form id="{{ id }}-form" class="modal__form" novalidate>
+        <div class="modal__header">
+            <h2 id="{{ id }}-title">{{ title }}</h2>
+            <button class="btn btn--ghost btn--icon btn--sm" type="button" data-dialog-close aria-label="Close">{{ icon("x") }}</button>
+        </div>
+        <div class="modal__body">
+            <div class="alert alert--danger" id="{{ id }}-alert" role="alert" hidden>{{ icon("alert-circle") }}<span></span></div>
+            {{ caller() }}
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn--secondary" type="button" data-dialog-close>Cancel</button>
+            <button class="btn btn--primary" type="submit">{{ submit_label }}</button>
+        </div>
+    </form>
+</dialog>
+{% endmacro %}

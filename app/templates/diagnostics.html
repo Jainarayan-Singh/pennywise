@@ -1,0 +1,21 @@
+{% extends "layouts/public.html" %}
+{% from "components/macros.html" import icon %}
+
+{% block title %}Diagnostics · {{ app_name }}{% endblock %}
+
+{% block content %}
+<main id="main-content" class="container diagnostics">
+    <div class="toolbar-row">
+        <div>
+            <h1>Diagnostics <span class="badge badge--warning">Development only</span></h1>
+            <p class="muted">Live status of this running instance. This page does not exist in production.</p>
+        </div>
+        <button id="recheck-button" class="btn btn--secondary" type="button">{{ icon("refresh") }}Re-check</button>
+    </div>
+    <div id="diagnostics-content" class="grid-auto" aria-live="polite"></div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/pages/diagnostics.js') }}"></script>
+{% endblock %}

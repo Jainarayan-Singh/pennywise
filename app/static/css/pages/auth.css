@@ -1,0 +1,51 @@
+.auth-page {
+    padding-block: var(--space-7);
+}
+
+.auth-card {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.auth-card__title {
+    font-size: var(--text-xl);
+}
+
+/* Two short fields side by side (first and last name); stacked on narrow phones. */
+.form__row {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 30rem) {
+    .auth-page {
+        padding-block: var(--space-5);
+    }
+
+    .form__row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid var(--color-border);
+}
+
+.profile {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+}

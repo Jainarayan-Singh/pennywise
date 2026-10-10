@@ -1,0 +1,566 @@
+.container {
+    width: min(var(--container-max), 100% - 2 * var(--space-4));
+    margin-inline: auto;
+}
+
+.container--narrow {
+    width: min(var(--container-narrow), 100% - 2 * var(--space-4));
+}
+
+.brand {
+    display: inline-flex;
+    min-width: 0; /* lets a long name give way instead of pushing the page wider than the screen */
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text);
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.01em;
+    text-decoration: none;
+}
+
+.brand:hover {
+    color: var(--color-text);
+}
+
+/* The product name, set in the configured brand font. Every value comes from the variables in /brand.css
+   (APP_BRAND_FONT is the only place the choice is made). */
+.brand-name {
+    font-family: var(--font-brand, var(--font-sans));
+    font-style: var(--font-brand-style, normal);
+    font-weight: var(--font-brand-weight, var(--weight-semibold));
+    letter-spacing: var(--font-brand-tracking, 0);
+    font-size: calc(1em * var(--font-brand-scale, 1)); /* evens out how big different typefaces look */
+}
+
+.brand .brand-name {
+    --brand-size: 1.35rem;
+    font-size: calc(var(--brand-size) * var(--font-brand-scale, 1));
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* The smallest phones: the brand name keeps the room; the page itself offers the same sign-in / dashboard buttons. */
+@media (max-width: 21rem) {
+    .btn.site-header__cta {
+        display: none;
+    }
+}
+
+@media (max-width: 22.5rem) {
+    .brand {
+        gap: var(--space-2);
+    }
+
+    .brand .brand-name {
+        --brand-size: 1.15rem;
+    }
+}
+
+.brand__logo {
+    flex: none;
+    width: var(--control-md);
+    height: var(--control-md);
+    border-radius: var(--radius-md);
+    object-fit: contain;
+}
+
+/* Public pages: simple header and footer */
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: var(--header-height);
+}
+
+.site-header__actions {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-left: auto;
+}
+
+.site-footer {
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-5);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+/* Signed-in application shell: sidebar + top bar + content */
+
+.app-shell {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    min-height: 100dvh;
+}
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sidebar);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    height: 100dvh;
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    overflow-y: auto;
+}
+
+.sidebar__brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--control-md);
+}
+
+/* Drawer controls exist only on compact screens; `.btn` is declared later, so these need the extra specificity. */
+.btn.sidebar__close,
+.btn.topbar__menu {
+    display: none;
+}
+
+.sidebar__nav {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    height: var(--control-md);
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.nav-item:hover {
+    background: var(--color-surface-sunken);
+    color: var(--color-text);
+}
+
+.nav-item[aria-current="page"] {
+    background: var(--color-primary-soft);
+    color: var(--color-primary-text);
+}
+
+.sidebar__footer {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: auto;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+}
+
+.sidebar__user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+.sidebar__user-text {
+    display: grid;
+    min-width: 0;
+}
+
+.sidebar__user-text span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btn.sidebar__collapse {
+    display: none;
+}
+
+.nav-item__label {
+    min-width: 0;
+}
+
+/* Desktop only: the sidebar can fold down to an icon rail. The choice is stored by core/nav-drawer.js and
+   applied before first paint by theme-init.js (html[data-sidebar]); phones keep the drawer. */
+@media (min-width: 64rem) {
+    .app-shell {
+        transition: grid-template-columns var(--transition-base);
+    }
+
+    .btn.sidebar__collapse {
+        display: inline-flex;
+    }
+
+    html[data-sidebar="collapsed"] {
+        --sidebar-width: 4.75rem;
+    }
+
+    html[data-sidebar="collapsed"] .sidebar {
+        padding-inline: var(--space-3);
+        overflow: visible; /* tooltips sit beside the rail */
+    }
+
+    html[data-sidebar="collapsed"] .sidebar__brand {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+
+    html[data-sidebar="collapsed"] .brand-name,
+    html[data-sidebar="collapsed"] .sidebar__user-text {
+        display: none;
+    }
+
+    html[data-sidebar="collapsed"] .nav-item,
+    html[data-sidebar="collapsed"] .sidebar__footer .btn {
+        justify-content: center;
+        gap: 0;
+        padding-inline: 0;
+    }
+
+    /* Hidden visually but still the control's accessible name. */
+    html[data-sidebar="collapsed"] .nav-item__label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    html[data-sidebar="collapsed"] .sidebar__user {
+        justify-content: center;
+    }
+
+    html[data-sidebar="collapsed"] .sidebar [data-tooltip]::after {
+        top: 50%;
+        left: calc(100% + var(--space-3));
+        transform: translateY(-50%);
+    }
+
+    html[data-sidebar="collapsed"] .sidebar__collapse .icon {
+        transform: scaleX(-1);
+    }
+}
+
+.app-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: var(--header-height);
+    padding-inline: var(--space-6);
+    background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.topbar__title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: var(--text-xl);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.topbar__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+/* On phones a labelled action becomes an icon button, so the page title keeps its room. */
+@media (max-width: 36rem) {
+    .topbar__title {
+        font-size: var(--text-lg);
+    }
+
+    .topbar__actions .btn:has(.btn__label) {
+        width: var(--control-md);
+        padding-inline: 0;
+    }
+
+    .topbar__actions .btn__label {
+        display: none;
+    }
+}
+
+@media (max-width: 22.5rem) {
+    .topbar {
+        gap: var(--space-2);
+        padding-inline: var(--space-3);
+    }
+
+    .topbar__actions {
+        gap: var(--space-1);
+    }
+}
+
+.app-content {
+    flex: 1;
+    display: grid;
+    gap: var(--space-5);
+    align-content: start;
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: var(--space-6);
+}
+
+.drawer-backdrop {
+    display: none;
+}
+
+@media (max-width: 63.99rem) {
+    .app-shell {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(var(--sidebar-width), 86vw);
+        z-index: var(--z-modal);
+        box-shadow: var(--shadow-lg);
+        transform: translateX(-100%);
+        visibility: hidden;
+        transition: transform var(--transition-base), visibility 0s linear var(--transition-base);
+    }
+
+    .sidebar[data-open] {
+        transform: none;
+        visibility: visible;
+        transition: transform var(--transition-base);
+    }
+
+    .btn.sidebar__close,
+    .btn.topbar__menu {
+        display: inline-flex;
+    }
+
+    .topbar {
+        padding-inline: var(--space-4);
+    }
+
+    .app-content {
+        padding: var(--space-5) var(--space-4);
+    }
+
+    .drawer-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: calc(var(--z-modal) - 1);
+        background: var(--color-overlay);
+    }
+
+    .drawer-backdrop[data-open] {
+        display: block;
+    }
+
+    body[data-drawer-open] {
+        overflow: hidden;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar {
+        transition: none;
+    }
+}
+
+/* Page building blocks */
+
+.page-intro {
+    max-width: 44rem;
+    color: var(--color-text-muted);
+}
+
+.toolbar-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-4);
+}
+
+.grid-auto {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+
+.grid-two {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    align-items: start;
+}
+
+/* Loading screen shown while signing out and returning to the landing page. It uses the app's own theme tokens,
+   so it is always in the theme the user has selected (set before first paint by theme-init.js). */
+
+.page-transition {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-overlay);
+    display: grid;
+    place-content: center;
+    background:
+        radial-gradient(60rem 36rem at 50% 38%, var(--color-primary-soft), transparent 70%),
+        var(--color-bg);
+    color: var(--color-text);
+    animation: splash-in 280ms ease-out backwards;
+}
+
+.page-transition.is-leaving {
+    opacity: 0;
+    transition: opacity 520ms ease;
+}
+
+/* The next page asks for the overlay before first paint (theme-init.js), so there is no flash of content. */
+html[data-arrival] .page-transition[hidden] {
+    display: grid !important;
+    animation: splash-failsafe 0s linear 4s forwards;
+}
+
+.splash {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+    width: min(28rem, 100vw - 2 * var(--space-5));
+    text-align: center;
+}
+
+.splash__mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 6rem;
+    height: 6rem;
+    margin-bottom: var(--space-3);
+}
+
+.splash__ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    fill: none;
+    stroke-width: 2.5;
+}
+
+.splash__track {
+    stroke: var(--color-border);
+}
+
+.splash__arc {
+    stroke: var(--color-primary);
+    stroke-linecap: round;
+    stroke-dasharray: 276.5;
+    stroke-dashoffset: 276.5;
+    animation: splash-arc var(--splash-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.splash__logo {
+    width: 4.25rem;
+    height: 4.25rem;
+    border-radius: 50%;
+    object-fit: contain;
+    animation: splash-breathe 2.4s ease-in-out infinite;
+}
+
+.splash__name {
+    margin: 0;
+    font-size: calc(var(--text-xl) * var(--font-brand-scale, 1));
+}
+
+.splash__message {
+    min-height: 1.25rem;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.splash__progress {
+    width: 100%;
+    height: 3px;
+    margin-top: var(--space-4);
+    border-radius: var(--radius-full);
+    background: var(--color-border);
+    overflow: hidden;
+}
+
+.splash__bar {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-primary);
+    transform-origin: left;
+    animation: splash-bar var(--splash-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+html[data-arrival] .splash__arc {
+    animation: none;
+    stroke-dashoffset: 0;
+}
+
+html[data-arrival] .splash__bar {
+    animation: none;
+}
+
+@keyframes splash-in {
+    from { opacity: 0; }
+}
+
+@keyframes splash-arc {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes splash-bar {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+@keyframes splash-breathe {
+    50% { opacity: 0.72; transform: scale(0.96); }
+}
+
+@keyframes splash-failsafe {
+    to { visibility: hidden; pointer-events: none; }
+}

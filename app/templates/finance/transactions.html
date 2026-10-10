@@ -1,0 +1,128 @@
+{% extends "layouts/app.html" %}
+{% from "components/macros.html" import icon, select_field, date_field, form_dialog %}
+
+{% block page_title %}Transactions{% endblock %}
+
+{% block page_actions %}
+<button id="add-transaction-button" class="btn btn--primary" type="button" aria-label="Add transaction">{{ icon("plus") }}<span class="btn__label">Add transaction</span></button>
+{% endblock %}
+
+{% block main_attrs %}data-today="{{ today }}" data-currency="{{ currency }}" data-locale="{{ locale }}"{% endblock %}
+
+{% block content %}
+<p class="page-intro">Your income and expenses, filtered however you like.</p>
+
+<section aria-label="Totals for the current filters">
+    <div id="summary-cards" class="grid-auto"></div>
+</section>
+
+<form id="filter-form" class="card toolbar" aria-label="Filter transactions" novalidate>
+    <button id="filters-toggle" class="btn btn--secondary btn--block filters-toggle" type="button" aria-expanded="false" aria-controls="filter-fields">{{ icon("filter") }}Filters</button>
+    <div id="filter-fields" class="filters__fields" data-collapsed>
+    {% call select_field("filter-range", "range", "Date range") %}
+        <option value="">All dates</option>
+        {% for name in range_names %}<option value="{{ name }}">{{ label(name) }}</option>{% endfor %}
+        <option value="custom">Custom range…</option>
+    {% endcall %}
+    <div data-custom-range hidden>{{ date_field("filter-date-from", "date_from", "From", min=min_date, max=today, today=today, locale=locale, clearable=True, placeholder="Any date") }}</div>
+    <div data-custom-range hidden>{{ date_field("filter-date-to", "date_to", "To", min=min_date, max=today, today=today, locale=locale, clearable=True, placeholder="Any date") }}</div>
+    {% call select_field("filter-type", "type", "Type") %}
+        <option value="">Income &amp; expenses</option>
+        <option value="expense">Expenses</option>
+        <option value="income">Income</option>
+    {% endcall %}
+    {% call select_field("filter-category", "category_id", "Category") %}
+        <option value="">All categories</option>
+    {% endcall %}
+    {% call select_field("filter-account", "account_id", "Account") %}
+        <option value="">All accounts</option>
+    {% endcall %}
+    <div class="field">
+        <label class="field__label" for="filter-search">Search</label>
+        <div class="input-icon">
+            {{ icon("search") }}
+            <input class="input" id="filter-search" name="q" type="search" maxlength="100" placeholder="Merchant, description, notes" autocomplete="off">
+        </div>
+    </div>
+    {% call select_field("filter-sort", "sort", "Sort by", searchable=False) %}
+        <option value="date:desc">Newest first</option>
+        <option value="date:asc">Oldest first</option>
+        <option value="amount:desc">Highest amount</option>
+        <option value="amount:asc">Lowest amount</option>
+    {% endcall %}
+    <div class="btn-group">
+        <button class="btn btn--primary" type="submit">Apply</button>
+        <button id="reset-filters-button" class="btn btn--ghost" type="button">Reset</button>
+    </div>
+    </div>
+</form>
+
+<section class="card card--flush" aria-label="Transaction list" aria-live="polite">
+    <div id="list-state"></div>
+    <div id="table-wrap" class="table-wrap" hidden>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th><th scope="col">Details</th><th scope="col">Category</th>
+                    <th scope="col">Account</th><th scope="col" class="col-amount">Amount</th>
+                    <th scope="col"><span class="visually-hidden">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody id="transaction-rows"></tbody>
+        </table>
+    </div>
+    <nav id="pagination" class="pagination" aria-label="Pagination" hidden>
+        <button id="prev-page-button" class="btn btn--secondary btn--sm" type="button">Previous</button>
+        <span id="page-status" class="muted"></span>
+        <button id="next-page-button" class="btn btn--secondary btn--sm" type="button">Next</button>
+    </nav>
+</section>
+
+{% call form_dialog("transaction-dialog", "Add transaction", submit_label="Save transaction", size="modal--wide") %}
+    <div class="field">
+        <span class="field__label" id="tx-type-label">Type</span>
+        <div class="segmented segmented--block" role="radiogroup" aria-labelledby="tx-type-label">
+            <label class="segmented__option"><input type="radio" name="type" value="expense" checked><span>Expense</span></label>
+            <label class="segmented__option"><input type="radio" name="type" value="income"><span>Income</span></label>
+        </div>
+        <small class="field__error" data-error-for="type"></small>
+    </div>
+
+    <div class="form-grid">
+        <div class="field">
+            <label class="field__label" for="tx-amount">Amount</label>
+            <div class="input-group">
+                <span class="input-group__addon" id="tx-currency-hint">{{ currency }}</span>
+                <input class="input" id="tx-amount" name="amount" type="text" inputmode="decimal" autocomplete="off" required placeholder="0.00" aria-describedby="tx-amount-error">
+            </div>
+            <small class="field__error" id="tx-amount-error" data-error-for="amount"></small>
+        </div>
+        {{ date_field("tx-date", "transaction_date", "Date", min=min_date, max=today, today=today, locale=locale) }}
+        {% call select_field("tx-category", "category_id", "Category") %}<option value="">Uncategorised</option>{% endcall %}
+        {% call select_field("tx-account", "account_id", "Account") %}<option value="">No account</option>{% endcall %}
+        {% call select_field("tx-payment", "payment_method", "Payment method") %}
+            <option value="">Not specified</option>
+            {% for method in payment_methods %}<option value="{{ method }}">{{ label(method) }}</option>{% endfor %}
+        {% endcall %}
+        <div class="field">
+            <label class="field__label" for="tx-merchant">Merchant</label>
+            <input class="input" id="tx-merchant" name="merchant" type="text" maxlength="120" autocomplete="off" aria-describedby="tx-merchant-error">
+            <small class="field__error" id="tx-merchant-error" data-error-for="merchant"></small>
+        </div>
+    </div>
+    <div class="field">
+        <label class="field__label" for="tx-description">Description</label>
+        <input class="input" id="tx-description" name="description" type="text" maxlength="255" autocomplete="off" aria-describedby="tx-description-error">
+        <small class="field__error" id="tx-description-error" data-error-for="description"></small>
+    </div>
+    <div class="field">
+        <label class="field__label" for="tx-notes">Notes</label>
+        <textarea class="textarea" id="tx-notes" name="notes" rows="3" maxlength="2000" aria-describedby="tx-notes-error"></textarea>
+        <small class="field__error" id="tx-notes-error" data-error-for="notes"></small>
+    </div>
+{% endcall %}
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/pages/transactions.js') }}"></script>
+{% endblock %}

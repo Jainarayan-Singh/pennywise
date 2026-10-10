@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="passkey-origin" content="{{ passkey_origin }}">
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    {# Blocking on purpose: applies the saved theme before first paint so there is no flash. #}
+    <script src="{{ url_for('static', filename='js/core/theme-init.js') }}"></script>
+    {% if brand_font_preload %}<link rel="preload" href="{{ brand_font_preload }}" as="font" type="font/woff2" crossorigin>{% endif %}
+    <link rel="stylesheet" href="{{ url_for('main.brand_css', v=brand_css_version) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tokens.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pickers.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body {% block body_attrs %}{% endblock %}>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    {% block layout %}{% endblock %}
+    {% include "components/shell.html" %}
+    <script type="module" src="{{ url_for('static', filename='js/core/app.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

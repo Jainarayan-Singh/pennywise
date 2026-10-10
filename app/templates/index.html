@@ -1,0 +1,82 @@
+{% extends "layouts/public.html" %}
+{% from "components/macros.html" import icon %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/landing.css') }}">
+{% endblock %}
+
+{% block content %}
+{% set signed_in = current_user() %}
+<main id="main-content">
+    <section class="hero">
+        <div class="container hero__inner">
+            <h1 class="hero__title">Know where your money goes.</h1>
+            <p class="hero__lead">
+                Record your income and expenses, organise them into categories and accounts, and see a clear
+                picture of every month, all in one private place.
+            </p>
+            <div class="btn-group">
+                {% if signed_in %}
+                <a class="btn btn--primary btn--lg" href="{{ url_for('finance_pages.dashboard_page') }}">Open your dashboard</a>
+                <a class="btn btn--secondary btn--lg" href="{{ url_for('finance_pages.transactions_page') }}">View transactions</a>
+                {% else %}
+                <a class="btn btn--primary btn--lg" href="{{ url_for('auth_pages.login_page', tab='register') }}">Get started free</a>
+                <a class="btn btn--secondary btn--lg" href="{{ url_for('auth_pages.login_page') }}">Sign in</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="features" aria-labelledby="features-title">
+            <h2 id="features-title" class="section-heading">Everything you need to stay on top of spending</h2>
+            <div class="features__grid">
+                <article class="card feature">
+                    <span class="feature__icon">{{ icon("list") }}</span>
+                    <h3>Record every transaction</h3>
+                    <p>Log income and expenses with an amount, date, category and notes. Amounts are exact, in any currency you use.</p>
+                </article>
+                <article class="card feature">
+                    <span class="feature__icon">{{ icon("tag") }}</span>
+                    <h3>Organise your way</h3>
+                    <p>Start with ready-made categories, add your own, and keep cash, bank, card and wallet accounts separate.</p>
+                </article>
+                <article class="card feature">
+                    <span class="feature__icon">{{ icon("layout") }}</span>
+                    <h3>See the full picture</h3>
+                    <p>Your dashboard shows this month's income and spending, your biggest categories and your latest activity.</p>
+                </article>
+                <article class="card feature">
+                    <span class="feature__icon">{{ icon("filter") }}</span>
+                    <h3>Find anything fast</h3>
+                    <p>Filter by date, category, account or amount, search your notes, and get totals for exactly what you select.</p>
+                </article>
+                {% if ai_enabled %}
+                <article class="card feature">
+                    <span class="feature__icon">{{ icon("sparkles") }}</span>
+                    <h3>Add by simply saying it</h3>
+                    <p>Type{% if voice_enabled %} or speak{% endif %} something like “Yesterday I paid 1200 for petrol”, check the details, and save.</p>
+                </article>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="steps" aria-labelledby="steps-title">
+            <h2 id="steps-title" class="section-heading">How it works</h2>
+            <ol class="steps__list">
+                <li><span class="steps__number">1</span><div><h3>Add</h3><p>Enter what you earned or spent as it happens.</p></div></li>
+                <li><span class="steps__number">2</span><div><h3>Organise</h3><p>Sort it into categories and accounts that fit your life.</p></div></li>
+                <li><span class="steps__number">3</span><div><h3>Review</h3><p>Check your totals and trends and make better decisions.</p></div></li>
+            </ol>
+        </section>
+
+        {% if not signed_in %}
+        <section class="cta" aria-labelledby="cta-title">
+            <h2 id="cta-title">Start tracking today</h2>
+            <p>Create a free account and record your first transaction in under a minute.</p>
+            <a class="btn btn--primary btn--lg" href="{{ url_for('auth_pages.login_page', tab='register') }}">Create your account</a>
+        </section>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
