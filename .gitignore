@@ -41,4 +41,5 @@ Thumbs.db
 .DS_Store
 
 # testing folder
-test/
+tests/
+migrations/
