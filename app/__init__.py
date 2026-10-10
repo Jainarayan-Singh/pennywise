@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import timedelta
 
 from flask import Flask
+from sqlalchemy import event
 
 from app.config import Settings
 from app.extensions import db, migrate
@@ -15,6 +16,19 @@ from app.security.origin import register_canonical_origin
 from app.security.rate_limit import RateLimiter
 from app.utils.errors import register_error_handlers
 from app.utils.logging_setup import configure_logging, register_request_id
+
+
+def _use_schema(app: Flask, schema: str) -> None:
+    """Make every database connection work in `schema` (the name is validated at startup, so it is safe to inline)."""
+    with app.app_context():
+        engine = db.engine
+
+    @event.listens_for(engine, "connect")
+    def _set_search_path(dbapi_connection, _record):
+        cursor = dbapi_connection.cursor()
+        cursor.execute(f'SET search_path TO "{schema}"')
+        cursor.close()
+        dbapi_connection.commit()
 
 
 def create_app(settings: Settings | None = None) -> Flask:
@@ -41,6 +55,8 @@ def create_app(settings: Settings | None = None) -> Flask:
     from app import models  # noqa: F401  (registers every model with SQLAlchemy and Alembic)
 
     migrate.init_app(app, db)
+    if settings.database.schema and settings.sqlalchemy_url.startswith("postgresql"):
+        _use_schema(app, settings.database.schema)
     app.extensions["rate_limiter"] = RateLimiter()
     app.extensions["email_sender"] = build_email_sender(settings, app.instance_path)
     ai_provider = build_ai_provider(settings)

@@ -18,9 +18,10 @@ APP_BRAND_FONT=Playfair Display Italic
 ```
 
 Also required before real users:
-- **Render:** Build command `pip install -r requirements.txt && flask db upgrade`; start command `gunicorn wsgi:app`; set `FLASK_APP=wsgi.py`, `PYTHON_VERSION=3.11` and the environment variables above in the dashboard (use Render's PostgreSQL URL for `DATABASE_URL`). Do not use `python run.py` in production.
+- **Render:** Build command `pip install -r requirements.txt`. **Start command `flask --app wsgi db upgrade && gunicorn wsgi:app`**: the first half creates or updates the database tables on every deploy (a new database is empty, and without this step every page that touches data fails with `relation "users" does not exist`); it is safe to repeat. Set the environment variables above in the dashboard (use Render's PostgreSQL *internal* URL for `DATABASE_URL`). Do not use `python run.py` in production.
 - **HTTPS termination:** put a reverse proxy in front. Configure forwarded headers (ProxyFix) so rate limiting sees the real client IP.
 - **Email:** required. Sign-up and password reset are done by emailed links, through an HTTP API (no SMTP needed), and the app will not start in production without `EMAIL_PROVIDER`. Verify your sender domain with the provider first (see docs/CONFIGURATION.md), then send a test sign-up from the live site after deploying. Keep `EMAIL_API_KEY` in Render's environment settings, never in Git.
+- **Supabase / shared database:** use the direct or session connection string (port 5432, not the 6543 transaction pooler), `DATABASE_SSL_MODE=require`, and set `DATABASE_SCHEMA=pennywise` so Penny Wise creates and uses its own schema instead of touching `public` or another app's tables.
 - **Existing accounts:** run `flask db upgrade` once. Revision `65b06a2ccb78` marks accounts created before email verification as verified so their owners can still sign in (data only; nothing is removed).
 - **Rate limiting** is per process; use one worker or add a shared store.
 - **Migrations:** run `flask db upgrade` deliberately during deploy, after reading the generated migration.

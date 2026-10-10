@@ -16,6 +16,7 @@ All settings are read once, in `app/config/settings.py`, from environment variab
 | `EMAIL_FROM` | empty | Sender address on a domain you have verified with the provider; required when `EMAIL_PROVIDER` is set |
 | `APP_BASE_URL` | `http://localhost:5000` | Bare origin users open. Email links, cookies, the passkey origin and the passkey RP ID all derive from it (`PUBLIC_BASE_URL` is still read as an older name) || `DATABASE_URL` | required | PostgreSQL connection string |
 | `DATABASE_SSL_MODE` | `prefer` | libpq `sslmode`; use `require` in production |
+| `DATABASE_SCHEMA` | empty | Optional PostgreSQL schema (e.g. `pennywise`) for every table. It is created automatically by `flask db upgrade`. Use it on a hosted or shared database (Supabase, or one that also holds another app) and whenever the connection reports "no schema has been selected to create in" |
 | `AI_API_KEY` | empty | Gemini key; empty disables Quick add |
 | `AI_TEXT_MODEL` / `AI_FALLBACK_MODEL` | empty (e.g. `gemini-3.5-flash-lite` / `gemini-3.1-flash-lite`) | Primary model (required for Quick add) and the one tried when the primary hits its quota |
 | `AI_TIMEOUT_SECONDS` | `45` | Per-request timeout |

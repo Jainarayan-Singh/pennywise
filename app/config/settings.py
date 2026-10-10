@@ -101,6 +101,7 @@ class AppSettings:
 class DatabaseSettings:
     url: str = field(default="", repr=False)
     ssl_mode: str = "prefer"
+    schema: str = ""  # PostgreSQL schema for all tables; empty uses the connection's default
 
 
 @dataclass(frozen=True)
@@ -197,6 +198,7 @@ class Settings:
             database=DatabaseSettings(
                 url=_str(env, "DATABASE_URL"),
                 ssl_mode=_str(env, "DATABASE_SSL_MODE", "prefer"),
+                schema=_str(env, "DATABASE_SCHEMA"),
             ),
             ai=AISettings(
                 api_key=_str(env, "AI_API_KEY"),
@@ -254,6 +256,8 @@ class Settings:
             problems.append("SECRET_KEY must be at least 32 characters in production.")
         if not self.database.url:
             problems.append("DATABASE_URL is required.")
+        if self.database.schema and not re.fullmatch(r"[a-z_][a-z0-9_]{0,62}", self.database.schema):
+            problems.append("DATABASE_SCHEMA must be lowercase letters, digits and underscores, e.g. pennywise.")
 
         origin = urlparse(app.public_base_url)
         if origin.scheme not in {"http", "https"} or not origin.hostname or origin.path or origin.query:

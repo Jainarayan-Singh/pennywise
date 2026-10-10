@@ -4,6 +4,7 @@ from logging.config import fileConfig
 from flask import current_app
 
 from alembic import context
+from sqlalchemy import text
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -96,7 +97,11 @@ def run_migrations_online():
 
     connectable = get_engine()
 
+    schema = current_app.extensions["settings"].database.schema
     with connectable.connect() as connection:
+        if schema and connection.dialect.name == "postgresql":
+            connection.execute(text(f'CREATE SCHEMA IF NOT EXISTS "{schema}"'))  # name validated at startup
+            connection.commit()
         context.configure(
             connection=connection,
             target_metadata=get_metadata(),
