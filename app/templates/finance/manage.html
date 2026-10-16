@@ -1,10 +1,13 @@
 {% extends "layouts/app.html" %}
 {% from "components/macros.html" import icon, select_field, form_dialog %}
 
+{% block content_class %}app-content--narrow{% endblock %}
+
 {% block page_title %}Categories &amp; accounts{% endblock %}
 
+{% block page_subtitle %}Archive what you no longer use. Past transactions keep their category and account, so history stays accurate.{% endblock %}
+
 {% block content %}
-<p class="page-intro">Archive what you no longer use. Past transactions keep their category and account, so history stays accurate.</p>
 
 <section class="card card--stack" aria-labelledby="categories-heading">
     <div class="section-title">

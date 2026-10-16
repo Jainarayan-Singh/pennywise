@@ -49,7 +49,7 @@ function buildTiles() {
         const chip = document.createElement("span");
         chip.className = "stat-tile__icon";
         chip.append(icon(iconName));
-        const title = document.createElement("h2");
+        const title = document.createElement("h3");
         title.className = "stat-tile__label";
         title.textContent = label;
         head.append(chip, title);

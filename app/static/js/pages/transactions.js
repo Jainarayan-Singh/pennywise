@@ -77,21 +77,24 @@ function accountOptions(keepId = "") {
 function renderSummary(totals) {
     els.summary.replaceChildren(...totals.map((total) => {
         const card = document.createElement("article");
-        card.className = "card stat";
+        card.className = "card summary";
         const title = document.createElement("h2");
-        title.className = "stat__title";
+        title.className = "summary__title";
         title.textContent = `${total.currency} · ${total.count} transaction${total.count === 1 ? "" : "s"}`;
-        const rows = document.createElement("dl");
-        rows.className = "stat__rows";
+        const figures = document.createElement("dl");
+        figures.className = "summary__figures";
         for (const [label, key, cls] of [["Income", "income", "amount--income"], ["Expenses", "expense", "amount--expense"], ["Net", "net", ""]]) {
+            const item = document.createElement("div");
+            item.className = "summary__figure";
             const dt = document.createElement("dt");
             dt.textContent = label;
             const dd = document.createElement("dd");
             dd.textContent = money(total[key], total.currency);
             if (cls) dd.className = cls;
-            rows.append(dt, dd);
+            item.append(dt, dd);
+            figures.append(item);
         }
-        card.append(title, rows);
+        card.append(title, figures);
         return card;
     }));
 }
@@ -107,8 +110,10 @@ function cell(label, className, ...children) {
 function iconButton(label, iconName, className, onClick) {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = `btn btn--sm ${className}`;
-    button.append(icon(iconName), label);
+    button.className = `btn btn--icon btn--sm ${className}`;
+    button.setAttribute("aria-label", label);
+    button.title = label; // a native hint: a CSS tooltip would add scrollable overflow inside the table
+    button.append(icon(iconName));
     button.addEventListener("click", onClick);
     return button;
 }
@@ -134,16 +139,16 @@ function renderRows(items) {
         const actions = document.createElement("div");
         actions.className = "btn-group";
         actions.append(
-            iconButton("Edit", "pencil", "btn--ghost", () => openDialog(item)),
-            iconButton("Delete", "trash", "btn--danger-ghost", () => removeTransaction(item)),
+            iconButton("Edit transaction", "pencil", "btn--ghost", () => openDialog(item)),
+            iconButton("Delete transaction", "trash", "btn--danger-ghost", () => removeTransaction(item)),
         );
 
         const tr = document.createElement("tr");
         tr.append(
-            cell("Date", "", formatDate(item.transaction_date, locale)),
-            cell("Details", "", primary),
-            cell("Category", item.category ? "" : "is-empty", item.category ? item.category.name : "—"),
-            cell("Account", item.account ? "" : "is-empty", item.account ? item.account.name : "—"),
+            cell("Date", "col-date", formatDate(item.transaction_date, locale)),
+            cell("Details", "col-details", primary),
+            cell("Category", item.category ? "col-category" : "col-category is-empty", item.category ? item.category.name : "—"),
+            cell("Account", item.account ? "col-account" : "col-account is-empty", item.account ? item.account.name : "—"),
             cell("Amount", "col-amount", amount),
             cell("", "col-actions", actions),
         );

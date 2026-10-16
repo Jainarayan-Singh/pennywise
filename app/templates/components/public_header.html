@@ -1,18 +1,21 @@
-{% from "components/macros.html" import icon, brand_logo %}
+{% from "components/macros.html" import icon, brand_logo, theme_menu %}
 <header class="site-header">
     <div class="container site-header__inner">
         <a class="brand" href="{{ url_for('main.landing') }}">
             {{ brand_logo() }}
             <span class="brand-name">{{ app_name }}</span>
         </a>
+        <nav class="site-nav" aria-label="Sections">
+            <a href="{{ url_for('main.landing') }}#features">Features</a>
+            <a href="{{ url_for('main.landing') }}#how-it-works">How it works</a>
+        </nav>
         <div class="site-header__actions">
-            <button class="btn btn--ghost btn--icon" type="button" data-theme-toggle data-tooltip="Switch theme" data-tooltip-align="end" aria-label="Switch theme">
-                {{ icon("moon", "theme-icon--moon") }}{{ icon("sun", "theme-icon--sun") }}
-            </button>
+            {{ theme_menu() }}
             {% if current_user() %}
-            <a class="btn btn--primary site-header__cta" href="{{ url_for('finance_pages.dashboard_page') }}">Dashboard</a>
+            <a class="btn btn--primary btn--sm" href="{{ url_for('finance_pages.dashboard_page') }}">Dashboard</a>
             {% else %}
-            <a class="btn btn--secondary site-header__cta" href="{{ url_for('auth_pages.login_page') }}">Sign in</a>
+            <a class="btn btn--ghost btn--sm" href="{{ url_for('auth_pages.login_page') }}">Sign in</a>
+            <a class="btn btn--primary btn--sm site-header__get-started" href="{{ url_for('auth_pages.login_page', tab='register') }}">Get started</a>
             {% endif %}
         </div>
     </div>

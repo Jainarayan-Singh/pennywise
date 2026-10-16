@@ -1,15 +1,7 @@
 const STORAGE_KEY = "theme";
+const THEMES = ["light", "dark", "midnight", "emerald", "sunset"];
+const DEFAULT_THEME = "sunset";
 const root = document.documentElement;
-const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-
-function readStoredTheme() {
-    try {
-        const value = localStorage.getItem(STORAGE_KEY);
-        return value === "light" || value === "dark" ? value : null;
-    } catch {
-        return null;
-    }
-}
 
 function storeTheme(theme) {
     try {
@@ -21,27 +13,20 @@ function storeTheme(theme) {
 
 function applyTheme(theme) {
     root.dataset.theme = theme;
-    const next = theme === "dark" ? "light" : "dark";
-    for (const button of document.querySelectorAll("[data-theme-toggle]")) {
-        const label = `Switch to ${next} theme`;
-        button.setAttribute("aria-label", label);
-        button.dataset.tooltip = label;
+    for (const option of document.querySelectorAll("[data-theme-option]")) {
+        option.setAttribute("aria-checked", String(option.dataset.themeOption === theme));
     }
 }
 
+/** Every `[data-theme-option="name"]` menu item switches the whole app to that theme and remembers it. */
 export function initTheme() {
-    applyTheme(root.dataset.theme === "dark" ? "dark" : "light");
+    applyTheme(THEMES.includes(root.dataset.theme) ? root.dataset.theme : DEFAULT_THEME);
 
-    for (const button of document.querySelectorAll("[data-theme-toggle]")) {
-        button.addEventListener("click", () => {
-            const next = root.dataset.theme === "dark" ? "light" : "dark";
-            storeTheme(next);
-            applyTheme(next);
+    for (const option of document.querySelectorAll("[data-theme-option]")) {
+        option.addEventListener("click", () => {
+            const theme = option.dataset.themeOption;
+            storeTheme(theme);
+            applyTheme(theme);
         });
     }
-
-    // Follow the OS only while the user hasn't made an explicit choice.
-    systemDark.addEventListener("change", (event) => {
-        if (!readStoredTheme()) applyTheme(event.matches ? "dark" : "light");
-    });
 }

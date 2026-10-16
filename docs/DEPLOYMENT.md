@@ -14,7 +14,7 @@ DATABASE_SSL_MODE=require
 EMAIL_PROVIDER=resend
 EMAIL_API_KEY=<your Resend API key>
 EMAIL_FROM=<an address on a domain verified in Resend>
-APP_BRAND_FONT=Playfair Display Italic
+APP_BRAND_FONT=Source Serif
 ```
 
 Also required before real users:

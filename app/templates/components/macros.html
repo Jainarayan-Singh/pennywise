@@ -91,3 +91,20 @@
     </form>
 </dialog>
 {% endmacro %}
+
+{# Theme picker: a menu of the five themes. theme.js marks the active one (aria-checked) and stores the choice. #}
+{% macro theme_menu() %}
+<div class="menu menu--icon" data-menu>
+    <button class="btn btn--ghost btn--icon" type="button" data-theme-toggle data-menu-trigger aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Choose theme">
+        {{ icon("palette") }}
+    </button>
+    <div class="menu__panel" id="theme-menu" role="menu" aria-label="Theme" hidden data-menu-panel>
+        <span class="menu__heading">Theme</span>
+        {% for key, label in (("light", "Paper"), ("dark", "Dark"), ("midnight", "Midnight"), ("emerald", "Emerald"), ("sunset", "Sunset")) %}
+        <button class="menu__item" role="menuitemradio" type="button" data-theme-option="{{ key }}" aria-checked="false">
+            <i class="theme-dot theme-dot--{{ key }}"></i>{{ label }}{{ icon("check", "menu__check") }}
+        </button>
+        {% endfor %}
+    </div>
+</div>
+{% endmacro %}

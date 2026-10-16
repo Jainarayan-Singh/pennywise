@@ -1,20 +1,19 @@
 {% extends "layouts/app.html" %}
 {% from "components/macros.html" import icon, select_field, date_field, form_dialog %}
 
+{% block content_class %}app-content--narrow{% endblock %}
+
 {% block page_title %}Quick add{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/assistant.css') }}">
 {% endblock %}
 
-{% block page_actions %}
-<a class="btn btn--secondary" href="{{ url_for('finance_pages.transactions_page', new=1) }}" aria-label="Add manually instead">{{ icon("pencil") }}<span class="btn__label">Add manually instead</span></a>
-{% endblock %}
+{% block page_subtitle %}Describe an expense or income in your own words. Nothing is saved until you review and confirm it.{% endblock %}
 
 {% block main_attrs %}data-today="{{ today }}" data-currency="{{ currency }}" data-locale="{{ locale }}" data-voice="{{ 'true' if voice_enabled else 'false' }}" data-max-audio="{{ max_audio_seconds }}"{% endblock %}
 
 {% block content %}
-<p class="page-intro">Describe an expense or income in your own words. Nothing is saved until you review and confirm it.</p>
 
 {% if not enabled %}
 <div class="card"><div class="state">
@@ -49,10 +48,10 @@
             <span class="composer__hint">Enter to send · Shift+Enter for a new line</span>
             <div class="composer__actions">
                 {% if voice_enabled %}
-                <button id="mic-button" class="btn btn--ghost btn--icon" type="button"
+                <button id="mic-button" class="btn btn--ghost btn--icon btn--sm" type="button"
                         aria-label="Speak instead of typing" data-tooltip="Speak instead of typing" data-tooltip-align="end">{{ icon("mic") }}</button>
                 {% endif %}
-                <button id="send-button" class="btn btn--primary" type="submit">{{ icon("plus") }}Send</button>
+                <button id="send-button" class="btn btn--primary btn--sm" type="submit">Send</button>
             </div>
         </div>
     </form>
@@ -62,6 +61,7 @@
         <button class="chip" type="button" data-example="Yesterday I paid 1200 for petrol">Yesterday I paid 1200 for petrol</button>
         <button class="chip" type="button" data-example="Kal 350 rupaye chai aur snacks pe kharch kiye">Kal 350 rupaye chai aur snacks pe kharch kiye</button>
     </div>
+    <p class="assistant__manual"><a href="{{ url_for('finance_pages.transactions_page', new=1) }}">Add manually instead</a></p>
 </section>
 
 <section id="draft-card" class="card card--stack" aria-labelledby="draft-heading" hidden>
@@ -71,7 +71,7 @@
     </div>
     <dl id="draft-rows" class="draft-rows"></dl>
     <p id="draft-hint" class="muted small" hidden></p>
-    <div class="btn-group">
+    <div class="draft-actions">
         <button id="confirm-button" class="btn btn--primary" type="button">Confirm &amp; save</button>
         <button id="edit-button" class="btn btn--secondary" type="button">{{ icon("pencil") }}Edit details</button>
         <button id="discard-button" class="btn btn--danger-ghost" type="button">{{ icon("trash") }}Discard</button>

@@ -11,7 +11,7 @@ import re
 from dataclasses import dataclass
 from typing import Callable
 
-DEFAULT_BRAND_FONT = "Playfair Display Italic"
+DEFAULT_BRAND_FONT = "Source Serif"
 FALLBACK_FAMILY = "Brand Fallback"  # the bundled italic that stands in for a missing system font
 FALLBACK_FILE = "playfair-display-italic.woff2"
 _GENERIC = 'Georgia, "Times New Roman", serif'
@@ -29,6 +29,7 @@ class BrandFont:
     weight_range: str = "400 700"
     system_names: tuple[str, ...] = ()  # alternative installed names for a system font
     availability: str = ""
+    italic: bool = True  # a bundled font is served italic unless this is False
 
     @property
     def stack(self) -> str:
@@ -39,7 +40,7 @@ class BrandFont:
 
     @property
     def style(self) -> str:
-        return "italic" if self.where == "bundled" else "normal"
+        return "italic" if self.where == "bundled" and self.italic else "normal"
 
     @property
     def files(self) -> tuple[str, ...]:
@@ -47,6 +48,10 @@ class BrandFont:
 
 
 BRAND_FONTS: tuple[BrandFont, ...] = (
+    BrandFont(
+        "Source Serif", "Source Serif 4", "bundled", weight=600, tracking="-0.015em", italic=False,
+        file="source-serif-4-latin-wght-normal.woff2", weight_range="200 900", availability="bundled",
+    ),
     BrandFont("Segoe Script", "Segoe Script", "system", scale=0.9, availability="Windows"),
     BrandFont("Gabriola", "Gabriola", "system", scale=1.25, availability="Windows (7 and later)"),
     BrandFont("URW Chancery L", "URW Chancery L", "system", scale=1.15, system_names=("Z003",), availability="Linux (URW base35 fonts)"),
@@ -85,7 +90,7 @@ def render_css(font: BrandFont, font_url: Callable[[str], str]) -> str:
     """The stylesheet that makes `font` the brand font. `font_url` turns a file name into its URL."""
     faces = []
     if font.where == "bundled":
-        faces.append(_face(font.family, font.file, "italic", font.weight_range, font_url))
+        faces.append(_face(font.family, font.file, font.style, font.weight_range, font_url))
     else:  # the bundled italic is the stand-in when this system font isn't installed
         faces.append(_face(FALLBACK_FAMILY, FALLBACK_FILE, "italic", "400 900", font_url))
     variables = (

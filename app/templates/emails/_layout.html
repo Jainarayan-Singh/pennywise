@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light only">
+<title>{{ subject }}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f0eee6;">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#f0eee6;">{{ preheader }}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f0eee6;">
+<tr><td align="center" style="padding:32px 16px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;">
+    <tr><td style="padding:0 4px 20px 4px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:28px;font-weight:600;color:#2d2a26;">
+      {% if logo_url %}<img src="{{ logo_url }}" width="28" height="28" alt="" style="vertical-align:middle;border:0;border-radius:6px;margin-right:8px;">{% endif %}<span style="vertical-align:middle;">{{ app_name }}</span>
+    </td></tr>
+    <tr><td style="background-color:#faf9f5;border:1px solid #e3ddce;border-radius:12px;padding:32px 28px;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:26px;color:#2d2a26;">
+      <h1 style="margin:0 0 16px 0;font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:32px;font-weight:500;color:#2d2a26;">{{ heading }}</h1>
+      {% block body %}{% endblock %}
+    </td></tr>
+    <tr><td style="padding:20px 4px 0 4px;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;color:#6f6a62;">
+      {% block footer %}{% endblock %}
+      Sent by {{ app_name }}.
+    </td></tr>
+  </table>
+</td></tr>
+</table>
+</body>
+</html>

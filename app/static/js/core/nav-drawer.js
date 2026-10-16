@@ -1,4 +1,4 @@
-const COMPACT = window.matchMedia("(max-width: 63.99rem)");
+const COMPACT = window.matchMedia("(max-width: 47.99rem)");
 
 /** On tablet and mobile the sidebar is an off-canvas drawer; on desktop it is always visible and this does nothing. */
 export function initNavDrawer() {
@@ -53,7 +53,7 @@ export function initNavDrawer() {
     });
 }
 
-const DESKTOP = window.matchMedia("(min-width: 64rem)");
+const DESKTOP = window.matchMedia("(min-width: 48rem)");
 
 /**
  * Desktop only: fold the sidebar to an icon rail and back. The state lives on <html data-sidebar> (set before

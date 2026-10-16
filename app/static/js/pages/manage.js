@@ -24,11 +24,15 @@ const lists = {
 
 let renameTarget = null;
 
-function actionButton(label, iconName, onClick) {
+function actionButton(label, iconName, onClick, itemName = "") {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "btn btn--ghost btn--sm";
-    button.append(icon(iconName), label);
+    button.setAttribute("aria-label", itemName ? `${label} ${itemName}` : label);
+    const text = document.createElement("span");
+    text.className = "btn__label";
+    text.textContent = label;
+    button.append(icon(iconName), text);
     button.addEventListener("click", () => onClick(button));
     return button;
 }
@@ -54,10 +58,10 @@ function row(item, collection, detail) {
 
     const actions = document.createElement("div");
     actions.className = "btn-group";
-    actions.append(actionButton("Rename", "pencil", () => openRename(collection, item)));
+    actions.append(actionButton("Rename", "pencil", () => openRename(collection, item), item.name));
     actions.append(item.is_archived
-        ? actionButton("Restore", "refresh", (button) => restore(collection, item, button))
-        : actionButton("Archive", "inbox", () => archive(collection, item)));
+        ? actionButton("Restore", "refresh", (button) => restore(collection, item, button), item.name)
+        : actionButton("Archive", "inbox", () => archive(collection, item), item.name));
     li.append(main, actions);
     return li;
 }

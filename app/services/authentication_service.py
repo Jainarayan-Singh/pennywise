@@ -18,6 +18,7 @@ from app.models import PasswordResetToken, User, UserPreference
 from app.integrations.email import EmailDeliveryError, deliver
 from app.models.base import as_utc, utcnow
 from app.services.audit_service import record_event
+from app.services.email_messages import EmailContent, existing_account_email, reset_email, setup_email
 from app.utils.errors import ApiError, ValidationFailed
 
 logger = logging.getLogger(__name__)
@@ -114,18 +115,13 @@ def register_account(settings: Settings, *, first_name: str, last_name: str, ema
         raise ApiError(EMAIL_UNAVAILABLE, status_code=503, code="email_unavailable") from None
 
 
-def _mail(user: User, subject: str, body: str) -> None:
-    deliver(current_app, user.email, subject, body, user.display_name)
+def _mail(user: User, message: EmailContent) -> None:
+    deliver(current_app, user.email, message.subject, message.text, user.display_name, html=message.html)
 
 
 def _send_existing_account_notice(settings: Settings, user: User) -> None:
-    _mail(user,
-        f"You already have a {settings.app.name} account",
-        f"Hi {user.display_name.split()[0]},\n\nSomeone tried to create a {settings.app.name} account with this "
-        f"email address, but you already have one.\n\nSign in: {settings.app.public_base_url}/login\n"
-        "If you forgot your password, use \"Forgot your password?\" on that page.\n\n"
-        "If this wasn't you, you can ignore this email.",
-    )
+    _mail(user, existing_account_email(settings, user.display_name, f"{settings.app.public_base_url}/login"))
+
 
 def authenticate(email: str, password: str) -> User | None:
     """Return the user on success, None on any failure (callers show one generic message)."""
@@ -176,13 +172,7 @@ def _invalidate_tokens(user: User, now) -> None:
 def _send_setup_email(settings: Settings, user: User) -> None:
     hours = settings.auth.account_setup_ttl_hours
     token = _issue_token(user, timedelta(hours=hours))
-    link = f"{settings.app.public_base_url}/set-password?token={token}"
-    _mail(user,
-        f"Finish setting up your {settings.app.name} account",
-        f"Hi {user.display_name.split()[0]},\n\nWelcome to {settings.app.name}. Choose a password to finish creating "
-        f"your account. The link works once and expires in {hours} hours:\n\n{link}\n\n"
-        "If you didn't sign up, ignore this email: the account can't be used without this step.",
-    )
+    _mail(user, setup_email(settings, user.display_name, f"{settings.app.public_base_url}/set-password?token={token}", hours))
 
 
 def request_password_reset(settings: Settings, email: str) -> None:
@@ -201,11 +191,7 @@ def request_password_reset(settings: Settings, email: str) -> None:
         minutes = settings.auth.password_reset_ttl_minutes
         token = _issue_token(user, timedelta(minutes=minutes))
         link = f"{settings.app.public_base_url}/reset-password?token={token}"
-        _mail(user,
-            f"Reset your {settings.app.name} password",
-            f"Use this link to choose a new password. It works once and expires in {minutes} minutes:\n\n{link}\n\n"
-            "If you did not request this, ignore this email and your password stays the same.",
-        )
+        _mail(user, reset_email(settings, user.display_name, link, minutes))
         record_event("auth.password_reset_requested", user.id)
     except EmailDeliveryError:
         # Already logged by deliver(). The visitor still gets the generic answer: telling them about a failure

@@ -1,0 +1,8 @@
+{% extends "emails/_layout.html" %}
+{% from "emails/_button.html" import button %}
+{% block body %}
+<p style="margin:0 0 12px 0;">Hi {{ first_name }},</p>
+<p style="margin:0 0 12px 0;">We received a request to reset your {{ app_name }} password. Use the button below to choose a new one.</p>
+{{ button(link, "Reset your password") }}
+<p style="margin:0;font-size:14px;line-height:22px;color:#6f6a62;">This link works once and expires in {{ minutes }} minutes. If you didn&rsquo;t ask for this, ignore this email and your password stays the same.</p>
+{% endblock %}

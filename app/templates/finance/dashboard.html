@@ -11,6 +11,8 @@
 <a class="btn btn--primary" href="{{ url_for('finance_pages.transactions_page', new=1) }}" aria-label="Add transaction">{{ icon("plus") }}<span class="btn__label">Add transaction</span></a>
 {% endblock %}
 
+{% block page_subtitle %}<span id="dashboard-intro">Your income and spending at a glance.</span>{% endblock %}
+
 {% block main_attrs %}data-currency="{{ currency }}" data-locale="{{ locale }}"{% endblock %}
 
 {% block content %}
@@ -18,7 +20,6 @@
 
 <div id="dashboard-content">
     <div class="dash-toolbar">
-        <p class="page-intro" id="dashboard-intro">Your income and spending at a glance.</p>
         <div class="dash-filters">
             {% call select_field("dashboard-range", "range", "Period", searchable=False) %}
             <option value="this_month">This month</option>

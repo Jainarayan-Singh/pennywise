@@ -12,71 +12,128 @@
         <div class="container hero__inner">
             <h1 class="hero__title">Know where your money goes.</h1>
             <p class="hero__lead">
-                Record your income and expenses, organise them into categories and accounts, and see a clear
-                picture of every month, all in one private place.
+                {{ app_name }} keeps your income and expenses in one place, sorts them into categories and accounts,
+                and shows how each month is going.
             </p>
-            <div class="btn-group">
+            <div class="btn-group hero__actions">
                 {% if signed_in %}
                 <a class="btn btn--primary btn--lg" href="{{ url_for('finance_pages.dashboard_page') }}">Open your dashboard</a>
                 <a class="btn btn--secondary btn--lg" href="{{ url_for('finance_pages.transactions_page') }}">View transactions</a>
                 {% else %}
-                <a class="btn btn--primary btn--lg" href="{{ url_for('auth_pages.login_page', tab='register') }}">Get started free</a>
+                <a class="btn btn--primary btn--lg" href="{{ url_for('auth_pages.login_page', tab='register') }}">Get started</a>
                 <a class="btn btn--secondary btn--lg" href="{{ url_for('auth_pages.login_page') }}">Sign in</a>
                 {% endif %}
             </div>
         </div>
     </section>
 
-    <div class="container">
-        <section class="features" aria-labelledby="features-title">
-            <h2 id="features-title" class="section-heading">Everything you need to stay on top of spending</h2>
+    <section class="container showcase" aria-label="Product preview">
+        <figure class="preview" role="img" aria-label="Preview of the dashboard, using sample data">
+            <div class="preview__bar" aria-hidden="true">
+                <span class="preview__title">Dashboard</span>
+                <span class="preview__range">This month</span>
+            </div>
+            <div class="preview__body" aria-hidden="true">
+                <div class="preview__tiles">
+                    <div class="preview__tile">
+                        <span class="preview__label">{{ icon("arrow-down") }}Income</span>
+                        <strong>&#8377;87,500</strong>
+                    </div>
+                    <div class="preview__tile">
+                        <span class="preview__label">{{ icon("arrow-up") }}Expenses</span>
+                        <strong>&#8377;36,408</strong>
+                    </div>
+                    <div class="preview__tile">
+                        <span class="preview__label">{{ icon("trend-up") }}Savings</span>
+                        <strong>&#8377;51,092</strong>
+                    </div>
+                </div>
+                <div class="preview__columns">
+                    <div class="preview__panel">
+                        <h3>Recent transactions</h3>
+                        <ul class="preview__list">
+                            <li><div><strong>Acme Corp salary</strong><span>Salary &middot; HDFC Savings</span></div><b class="amount--income">+&#8377;85,000</b></li>
+                            <li><div><strong>Monthly rent</strong><span>Bills &amp; Utilities &middot; HDFC Savings</span></div><b class="amount--expense">&minus;&#8377;12,450</b></li>
+                            <li><div><strong>Groceries</strong><span>Food &amp; Dining &middot; Cash</span></div><b class="amount--expense">&minus;&#8377;1,860</b></li>
+                            <li><div><strong>Electricity and internet</strong><span>Bills &amp; Utilities &middot; HDFC Savings</span></div><b class="amount--expense">&minus;&#8377;4,999</b></li>
+                        </ul>
+                    </div>
+                    <div class="preview__panel">
+                        <h3>Where your money went</h3>
+                        <ul class="preview__bars">
+                            <li><span>Bills &amp; Utilities</span><i class="preview__fill preview__fill--1"></i><b>46%</b></li>
+                            <li><span>Shopping</span><i class="preview__fill preview__fill--2"></i><b>28%</b></li>
+                            <li><span>Food &amp; Dining</span><i class="preview__fill preview__fill--3"></i><b>14%</b></li>
+                            <li><span>Other</span><i class="preview__fill preview__fill--4"></i><b>12%</b></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <figcaption>Sample data. Your dashboard shows your own transactions.</figcaption>
+        </figure>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="features-title">
+        <div class="container">
+            <header class="section__head">
+                <h2 id="features-title">What you can do</h2>
+                <p>Everything in {{ app_name }} is about recording money and understanding it.</p>
+            </header>
             <div class="features__grid">
-                <article class="card feature">
+                <article class="feature">
                     <span class="feature__icon">{{ icon("list") }}</span>
                     <h3>Record every transaction</h3>
-                    <p>Log income and expenses with an amount, date, category and notes. Amounts are exact, in any currency you use.</p>
+                    <p>Add income and expenses with an amount, date, category, account, payment method, merchant and notes. Amounts are stored exactly.</p>
                 </article>
-                <article class="card feature">
+                <article class="feature">
                     <span class="feature__icon">{{ icon("tag") }}</span>
-                    <h3>Organise your way</h3>
-                    <p>Start with ready-made categories, add your own, and keep cash, bank, card and wallet accounts separate.</p>
+                    <h3>Organise with categories and accounts</h3>
+                    <p>Start with ready-made categories, add your own, and keep cash, bank, card and wallet accounts apart. Archived items keep their history.</p>
                 </article>
-                <article class="card feature">
+                <article class="feature">
                     <span class="feature__icon">{{ icon("layout") }}</span>
-                    <h3>See the full picture</h3>
-                    <p>Your dashboard shows this month's income and spending, your biggest categories and your latest activity.</p>
+                    <h3>See the month at a glance</h3>
+                    <p>Income, expenses and savings for any period, income against expenses by month, spending by category and a spending trend.</p>
                 </article>
-                <article class="card feature">
+                <article class="feature">
                     <span class="feature__icon">{{ icon("filter") }}</span>
-                    <h3>Find anything fast</h3>
-                    <p>Filter by date, category, account or amount, search your notes, and get totals for exactly what you select.</p>
+                    <h3>Find anything quickly</h3>
+                    <p>Filter by date, category, account or amount, search your notes, and get totals for exactly what you selected.</p>
                 </article>
                 {% if ai_enabled %}
-                <article class="card feature">
+                <article class="feature feature--wide">
                     <span class="feature__icon">{{ icon("sparkles") }}</span>
-                    <h3>Add by simply saying it</h3>
-                    <p>Type{% if voice_enabled %} or speak{% endif %} something like “Yesterday I paid 1200 for petrol”, check the details, and save.</p>
+                    <h3>Add by typing{% if voice_enabled %} or speaking{% endif %}</h3>
+                    <p>Describe a transaction in your own words, such as &ldquo;Yesterday I paid 1200 for petrol&rdquo;. You check the details before anything is saved.</p>
                 </article>
                 {% endif %}
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="steps" aria-labelledby="steps-title">
-            <h2 id="steps-title" class="section-heading">How it works</h2>
+    <section class="section section--tint" id="how-it-works" aria-labelledby="steps-title">
+        <div class="container">
+            <header class="section__head">
+                <h2 id="steps-title">How it works</h2>
+            </header>
             <ol class="steps__list">
                 <li><span class="steps__number">1</span><div><h3>Add</h3><p>Enter what you earned or spent as it happens.</p></div></li>
                 <li><span class="steps__number">2</span><div><h3>Organise</h3><p>Sort it into categories and accounts that fit your life.</p></div></li>
-                <li><span class="steps__number">3</span><div><h3>Review</h3><p>Check your totals and trends and make better decisions.</p></div></li>
+                <li><span class="steps__number">3</span><div><h3>Review</h3><p>Check your totals and trends, and decide what to change.</p></div></li>
             </ol>
-        </section>
+        </div>
+    </section>
 
-        {% if not signed_in %}
-        <section class="cta" aria-labelledby="cta-title">
-            <h2 id="cta-title">Start tracking today</h2>
-            <p>Create a free account and record your first transaction in under a minute.</p>
-            <a class="btn btn--primary btn--lg" href="{{ url_for('auth_pages.login_page', tab='register') }}">Create your account</a>
-        </section>
-        {% endif %}
-    </div>
+    {% if not signed_in %}
+    <section class="section" aria-labelledby="cta-title">
+        <div class="container">
+            <div class="cta">
+                <h2 id="cta-title">Start with your first transaction</h2>
+                <p>Create an account, add what you spent today, and your dashboard fills in from there.</p>
+                <a class="btn btn--primary btn--lg" href="{{ url_for('auth_pages.login_page', tab='register') }}">Create your account</a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
 </main>
 {% endblock %}

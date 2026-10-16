@@ -11,7 +11,7 @@
     display: inline-flex;
     min-width: 0; /* lets a long name give way instead of pushing the page wider than the screen */
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-2);
     color: var(--color-text);
     font-weight: var(--weight-bold);
     letter-spacing: -0.01em;
@@ -33,7 +33,7 @@
 }
 
 .brand .brand-name {
-    --brand-size: 1.35rem;
+    --brand-size: 1.25rem;
     font-size: calc(var(--brand-size) * var(--font-brand-scale, 1));
     line-height: 1.15;
     white-space: nowrap;
@@ -49,20 +49,16 @@
 }
 
 @media (max-width: 22.5rem) {
-    .brand {
-        gap: var(--space-2);
-    }
-
     .brand .brand-name {
-        --brand-size: 1.15rem;
+        --brand-size: 1.1rem;
     }
 }
 
 .brand__logo {
     flex: none;
-    width: var(--control-md);
-    height: var(--control-md);
-    border-radius: var(--radius-md);
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-sm);
     object-fit: contain;
 }
 
@@ -72,16 +68,16 @@
     position: sticky;
     top: 0;
     z-index: var(--z-header);
-    background: color-mix(in srgb, var(--color-surface) 88%, transparent);
-    backdrop-filter: saturate(1.4) blur(10px);
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--color-border);
 }
 
 .site-header__inner {
     display: flex;
     align-items: center;
-    gap: var(--space-4);
-    min-height: var(--header-height);
+    gap: var(--space-3);
+    min-height: 3.5rem;
 }
 
 .site-header__actions {
@@ -92,74 +88,222 @@
     margin-left: auto;
 }
 
+.site-nav {
+    display: flex;
+    gap: var(--space-1);
+    margin-left: var(--space-5);
+}
+
+.site-nav a {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.site-nav a:hover {
+    background: var(--color-surface-sunken);
+    color: var(--color-text);
+}
+
+@media (max-width: 47.99rem) {
+    .site-nav {
+        display: none;
+    }
+}
+
+@media (max-width: 29.99rem) {
+    .site-header__get-started {
+        display: none;
+    }
+}
+
 .site-footer {
     border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
     padding-block: var(--space-5);
-    color: var(--color-text-muted);
+    padding-bottom: calc(var(--space-5) + var(--safe-bottom));
     font-size: var(--text-sm);
 }
 
-.site-footer__inner {
+.site-footer__row {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
-    gap: var(--space-3);
+    gap: var(--space-4) var(--space-6);
 }
 
-/* Signed-in application shell: sidebar + top bar + content */
+.site-footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+}
+
+.site-footer a:not(.brand) {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.site-footer a:not(.brand):hover {
+    color: var(--color-primary-text);
+}
+
+.site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-subtle);
+    font-size: var(--text-xs);
+}
+
+@media (max-width: 40rem) {
+    .site-footer__row,
+    .site-footer__legal {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Signed-in pages: a quiet line under the content. */
+.app-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-5);
+    padding: var(--space-3) var(--space-6) calc(var(--space-3) + var(--safe-bottom));
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-subtle);
+    font-size: var(--text-xs);
+}
+
+.app-footer__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-weight: var(--weight-semibold);
+}
+
+.app-footer__brand .brand__logo {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+@media (max-width: 47.99rem) {
+    .app-footer {
+        padding-inline: var(--space-4);
+    }
+}
+
+/* Signed-in application shell: a thin top bar (brand, theme, profile) over a sidebar and the page. */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    height: var(--header-height);
+    padding-inline: var(--space-4);
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.topbar__spacer {
+    flex: 1;
+}
+
+.topbar__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+/* Drawer / rail controls: the phone drawer opens from `menu`, the desktop rail folds from `collapse`.
+   `.btn` is declared later, so these need the extra specificity. */
+.btn.topbar__menu {
+    display: none;
+}
+
+.btn.topbar__collapse {
+    display: inline-flex;
+}
 
 .app-shell {
     display: grid;
     grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-    min-height: 100dvh;
+    min-height: calc(100dvh - var(--header-height));
+    transition: grid-template-columns var(--transition-base);
 }
 
 .sidebar {
     position: sticky;
-    top: 0;
+    top: var(--header-height);
     z-index: var(--z-sidebar);
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
-    height: 100dvh;
-    padding: var(--space-4);
+    gap: var(--space-2);
+    height: calc(100dvh - var(--header-height));
+    padding: var(--space-2);
     background: var(--color-surface);
     border-right: 1px solid var(--color-border);
+    overflow-x: hidden;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
 }
 
-.sidebar__brand {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: var(--control-md);
-}
-
-/* Drawer controls exist only on compact screens; `.btn` is declared later, so these need the extra specificity. */
-.btn.sidebar__close,
-.btn.topbar__menu {
+.sidebar::-webkit-scrollbar {
     display: none;
 }
 
 .sidebar__nav {
     display: grid;
-    gap: var(--space-1);
+    gap: 2px;
     margin: 0;
     padding: 0;
     list-style: none;
+}
+
+.sidebar__label {
+    padding: var(--space-3) var(--space-2) var(--space-1);
+    color: var(--color-text-subtle);
+    font-size: 0.65rem;
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .nav-item {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    height: var(--control-md);
-    padding-inline: var(--space-3);
+    width: 100%;
+    min-height: var(--control-md);
+    padding: var(--space-1) var(--space-3);
+    border: 0;
     border-radius: var(--radius-md);
+    background: transparent;
     color: var(--color-text-muted);
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
+    text-align: left;
     text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
     transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
@@ -171,77 +315,52 @@
 .nav-item[aria-current="page"] {
     background: var(--color-primary-soft);
     color: var(--color-primary-text);
+    font-weight: var(--weight-semibold);
 }
 
-.sidebar__footer {
-    display: grid;
-    gap: var(--space-3);
-    margin-top: auto;
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--color-border);
+.nav-item--danger {
+    color: var(--color-danger);
 }
 
-.sidebar__user {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    min-width: 0;
-}
-
-.sidebar__user-text {
-    display: grid;
-    min-width: 0;
-}
-
-.sidebar__user-text span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.btn.sidebar__collapse {
-    display: none;
+.nav-item--danger:hover {
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
 }
 
 .nav-item__label {
     min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Desktop only: the sidebar can fold down to an icon rail. The choice is stored by core/nav-drawer.js and
-   applied before first paint by theme-init.js (html[data-sidebar]); phones keep the drawer. */
-@media (min-width: 64rem) {
-    .app-shell {
-        transition: grid-template-columns var(--transition-base);
-    }
+.sidebar__footer {
+    display: grid;
+    gap: 2px;
+    margin-top: auto;
+    padding-top: var(--space-2);
+    padding-bottom: var(--safe-bottom);
+    border-top: 1px solid var(--color-border);
+}
 
-    .btn.sidebar__collapse {
-        display: inline-flex;
-    }
-
+/* Tablet and desktop: the sidebar can fold down to an icon rail. The choice is stored by core/nav-drawer.js
+   and applied before first paint by theme-init.js (html[data-sidebar]); phones keep the drawer. */
+@media (min-width: 48rem) {
     html[data-sidebar="collapsed"] {
-        --sidebar-width: 4.75rem;
+        --sidebar-width: var(--sidebar-rail);
     }
 
     html[data-sidebar="collapsed"] .sidebar {
-        padding-inline: var(--space-3);
         overflow: visible; /* tooltips sit beside the rail */
     }
 
-    html[data-sidebar="collapsed"] .sidebar__brand {
-        flex-direction: column;
-        gap: var(--space-2);
-    }
-
-    html[data-sidebar="collapsed"] .brand-name,
-    html[data-sidebar="collapsed"] .sidebar__user-text {
-        display: none;
-    }
-
-    html[data-sidebar="collapsed"] .nav-item,
-    html[data-sidebar="collapsed"] .sidebar__footer .btn {
+    html[data-sidebar="collapsed"] .nav-item {
         justify-content: center;
         gap: 0;
         padding-inline: 0;
+    }
+
+    html[data-sidebar="collapsed"] .sidebar__label {
+        display: none;
     }
 
     /* Hidden visually but still the control's accessible name. */
@@ -254,17 +373,13 @@
         white-space: nowrap;
     }
 
-    html[data-sidebar="collapsed"] .sidebar__user {
-        justify-content: center;
-    }
-
     html[data-sidebar="collapsed"] .sidebar [data-tooltip]::after {
         top: 50%;
         left: calc(100% + var(--space-3));
         transform: translateY(-50%);
     }
 
-    html[data-sidebar="collapsed"] .sidebar__collapse .icon {
+    html[data-sidebar="collapsed"] .topbar__collapse .icon {
         transform: scaleX(-1);
     }
 }
@@ -275,47 +390,128 @@
     min-width: 0;
 }
 
-.topbar {
-    position: sticky;
-    top: 0;
-    z-index: var(--z-header);
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    min-height: var(--header-height);
-    padding-inline: var(--space-6);
-    background: color-mix(in srgb, var(--color-surface) 88%, transparent);
-    backdrop-filter: saturate(1.4) blur(10px);
-    border-bottom: 1px solid var(--color-border);
-}
-
-.topbar__title {
+.app-content {
     flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    font-size: var(--text-xl);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: grid;
+    gap: var(--space-5);
+    align-content: start;
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: var(--space-5) var(--space-6) calc(var(--space-6) + var(--safe-bottom));
 }
 
-.topbar__actions {
+/* Page header: title and subtitle on the left, the page's own actions on the right. */
+.app-content--narrow {
+    max-width: var(--content-narrow);
+}
+
+.page-head {
     display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+.page-head__text {
+    display: grid;
+    gap: var(--space-1);
+    min-width: 0;
+}
+
+.page-head__title {
+    margin: 0;
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 1.875rem);
+    letter-spacing: -0.025em;
+    overflow-wrap: anywhere;
+}
+
+.page-head__subtitle {
+    max-width: 44rem;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.page-head__subtitle:empty {
+    display: none;
+}
+
+.page-head__actions {
+    display: flex;
+    flex: none;
     align-items: center;
     gap: var(--space-2);
 }
 
-/* On phones a labelled action becomes an icon button, so the page title keeps its room. */
-@media (max-width: 36rem) {
-    .topbar__title {
-        font-size: var(--text-lg);
+.drawer-backdrop {
+    display: none;
+}
+
+@media (max-width: 47.99rem) {
+    .app-shell {
+        grid-template-columns: minmax(0, 1fr);
     }
 
-    .topbar__actions .btn:has(.btn__label) {
+    .btn.topbar__menu {
+        display: inline-flex;
+    }
+
+    .btn.topbar__collapse {
+        display: none;
+    }
+
+    /* The drawer opens under the top bar (which stays reachable to close it) and scrolls as a whole on short screens. */
+    .sidebar {
+        position: fixed;
+        inset: var(--header-height) auto 0 0;
+        width: min(var(--sidebar-width), 86vw);
+        height: auto;
+        padding-bottom: calc(var(--space-2) + var(--safe-bottom));
+        box-shadow: var(--shadow-lg);
+        transform: translateX(-100%);
+        visibility: hidden;
+        transition: transform var(--transition-base), visibility 0s linear var(--transition-base);
+    }
+
+    .sidebar[data-open] {
+        transform: none;
+        visibility: visible;
+        transition: transform var(--transition-base);
+    }
+
+    .sidebar__footer {
+        padding-bottom: 0;
+    }
+
+    .app-content {
+        padding: var(--space-4) var(--space-4) calc(var(--space-5) + var(--safe-bottom));
+        gap: var(--space-4);
+    }
+
+    .drawer-backdrop {
+        position: fixed;
+        inset: var(--header-height) 0 0;
+        z-index: calc(var(--z-sidebar) - 1);
+        background: var(--color-overlay);
+    }
+
+    .drawer-backdrop[data-open] {
+        display: block;
+    }
+
+    body[data-drawer-open] {
+        overflow: hidden;
+    }
+}
+
+/* On phones a labelled action becomes an icon button, so the page title keeps its room. */
+@media (max-width: 36rem) {
+    .page-head__actions .btn:has(.btn__label) {
         width: var(--control-md);
         padding-inline: 0;
     }
 
-    .topbar__actions .btn__label {
+    .page-head__actions .btn__label {
         display: none;
     }
 }
@@ -331,84 +527,14 @@
     }
 }
 
-.app-content {
-    flex: 1;
-    display: grid;
-    gap: var(--space-5);
-    align-content: start;
-    width: 100%;
-    max-width: var(--container-max);
-    margin-inline: auto;
-    padding: var(--space-6);
-}
-
-.drawer-backdrop {
-    display: none;
-}
-
-@media (max-width: 63.99rem) {
-    .app-shell {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .sidebar {
-        position: fixed;
-        inset: 0 auto 0 0;
-        width: min(var(--sidebar-width), 86vw);
-        z-index: var(--z-modal);
-        box-shadow: var(--shadow-lg);
-        transform: translateX(-100%);
-        visibility: hidden;
-        transition: transform var(--transition-base), visibility 0s linear var(--transition-base);
-    }
-
-    .sidebar[data-open] {
-        transform: none;
-        visibility: visible;
-        transition: transform var(--transition-base);
-    }
-
-    .btn.sidebar__close,
-    .btn.topbar__menu {
-        display: inline-flex;
-    }
-
-    .topbar {
-        padding-inline: var(--space-4);
-    }
-
-    .app-content {
-        padding: var(--space-5) var(--space-4);
-    }
-
-    .drawer-backdrop {
-        position: fixed;
-        inset: 0;
-        z-index: calc(var(--z-modal) - 1);
-        background: var(--color-overlay);
-    }
-
-    .drawer-backdrop[data-open] {
-        display: block;
-    }
-
-    body[data-drawer-open] {
-        overflow: hidden;
-    }
-}
-
 @media (prefers-reduced-motion: reduce) {
-    .sidebar {
+    .sidebar,
+    .app-shell {
         transition: none;
     }
 }
 
 /* Page building blocks */
-
-.page-intro {
-    max-width: 44rem;
-    color: var(--color-text-muted);
-}
 
 .toolbar-row {
     display: flex;
@@ -440,9 +566,7 @@
     z-index: var(--z-overlay);
     display: grid;
     place-content: center;
-    background:
-        radial-gradient(60rem 36rem at 50% 38%, var(--color-primary-soft), transparent 70%),
-        var(--color-bg);
+    background: var(--color-bg);
     color: var(--color-text);
     animation: splash-in 280ms ease-out backwards;
 }

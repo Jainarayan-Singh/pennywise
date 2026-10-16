@@ -1,0 +1,10 @@
+{# A bulletproof button (a table cell with its own background) plus the plain link beneath it for clients that strip buttons. #}
+{% macro button(url, label) -%}
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 20px 0;">
+  <tr><td align="center" bgcolor="#b9572f" style="border-radius:8px;background-color:#b9572f;">
+    <a href="{{ url }}" target="_blank" style="display:inline-block;padding:14px 28px;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:20px;font-weight:600;color:#ffffff;text-decoration:none;border-radius:8px;">{{ label }}</a>
+  </td></tr>
+</table>
+<p style="margin:0 0 4px 0;font-size:13px;line-height:20px;color:#6f6a62;">If the button doesn&rsquo;t work, copy this link into your browser:</p>
+<p style="margin:0 0 20px 0;font-size:13px;line-height:20px;word-break:break-all;"><a href="{{ url }}" target="_blank" style="color:#a64a28;">{{ url }}</a></p>
+{%- endmacro %}

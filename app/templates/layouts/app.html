@@ -1,28 +1,41 @@
 {% extends "base.html" %}
-{% from "components/macros.html" import icon %}
+{% from "components/macros.html" import icon, brand_logo, theme_menu %}
 
 {% block title %}{{ self.page_title() }} · {{ app_name }}{% endblock %}
 {% block body_attrs %}data-authenticated{% endblock %}
 
 {% block layout %}
 {% set user = current_user() %}
+<header class="topbar">
+    <button class="btn btn--ghost btn--icon topbar__menu" type="button" data-nav-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">{{ icon("menu") }}</button>
+    <button class="btn btn--ghost btn--icon topbar__collapse" type="button" data-sidebar-toggle aria-expanded="true" aria-controls="sidebar" aria-label="Collapse sidebar" data-label="Collapse sidebar">{{ icon("panel-left") }}</button>
+    <a class="brand" href="{{ url_for('finance_pages.dashboard_page') }}">
+        {{ brand_logo() }}
+        <span class="brand-name">{{ app_name }}</span>
+    </a>
+    <div class="topbar__spacer"></div>
+    <div class="topbar__actions">
+        {{ theme_menu() }}
+        {% include "components/user_menu.html" %}
+    </div>
+</header>
 <div class="app-shell">
     {% include "components/sidebar.html" %}
     <div class="app-main">
-        <header class="topbar">
-            <button class="btn btn--ghost btn--icon topbar__menu" type="button" data-nav-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">{{ icon("menu") }}</button>
-            <h1 class="topbar__title">{% block page_title %}{% endblock %}</h1>
-            <div class="topbar__actions">
-                {% block page_actions %}{% endblock %}
-                <button class="btn btn--ghost btn--icon" type="button" data-theme-toggle data-tooltip="Switch theme" data-tooltip-align="end" aria-label="Switch theme">
-                    {{ icon("moon", "theme-icon--moon") }}{{ icon("sun", "theme-icon--sun") }}
-                </button>
-                {% include "components/user_menu.html" %}
+        <main id="main-content" class="app-content {% block content_class %}{% endblock %}" {% block main_attrs %}{% endblock %}>
+            <div class="page-head">
+                <div class="page-head__text">
+                    <h1 class="page-head__title">{% block page_title %}{% endblock %}</h1>
+                    <div class="page-head__subtitle">{% block page_subtitle %}{% endblock %}</div>
+                </div>
+                <div class="page-head__actions">{% block page_actions %}{% endblock %}</div>
             </div>
-        </header>
-        <main id="main-content" class="app-content" {% block main_attrs %}{% endblock %}>
             {% block content %}{% endblock %}
         </main>
+        <footer class="app-footer">
+            <span class="app-footer__brand">{{ brand_logo() }}<span class="brand-name">{{ app_name }}</span></span>
+            <span>&copy; {{ copyright_year }} <span class="brand-name">{{ app_name }}</span></span>
+        </footer>
     </div>
 </div>
 <div class="drawer-backdrop" data-drawer-backdrop></div>

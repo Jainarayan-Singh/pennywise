@@ -1,0 +1,8 @@
+{% extends "emails/_layout.html" %}
+{% from "emails/_button.html" import button %}
+{% block body %}
+<p style="margin:0 0 12px 0;">Hi {{ first_name }},</p>
+<p style="margin:0 0 12px 0;">Someone tried to create a {{ app_name }} account with this email address, but you already have one.</p>
+{{ button(link, "Sign in") }}
+<p style="margin:0;font-size:14px;line-height:22px;color:#6f6a62;">If you forgot your password, choose &ldquo;Forgot your password?&rdquo; on the sign-in page. If this wasn&rsquo;t you, you can ignore this email.</p>
+{% endblock %}

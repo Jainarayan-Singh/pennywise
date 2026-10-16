@@ -1,3 +1,19 @@
+@font-face {
+    font-family: "DM Sans";
+    src: url("../fonts/dm-sans-latin-wght-normal.woff2") format("woff2");
+    font-weight: 100 1000;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Source Serif 4";
+    src: url("../fonts/source-serif-4-latin-wght-normal.woff2") format("woff2");
+    font-weight: 200 900;
+    font-style: normal;
+    font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -10,6 +26,8 @@
 
 html {
     -webkit-text-size-adjust: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-strong) transparent;
     scroll-padding-top: calc(var(--header-height) + var(--space-4));
 }
 
@@ -31,17 +49,30 @@ main {
     flex: 1;
 }
 
+/* One rule for type: headings 1 and 2 are the editorial serif, everything that works (labels, cards, controls) is the sans. */
 h1,
 h2,
 h3,
 h4 {
     margin: 0;
     line-height: var(--leading-tight);
-    letter-spacing: -0.015em;
-    font-weight: var(--weight-semibold);
 }
 
-h1 { font-size: var(--text-2xl); }
+h1,
+h2 {
+    font-family: var(--font-display);
+    font-weight: var(--weight-medium);
+    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
+}
+
+h3,
+h4 {
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.005em;
+}
+
+h1 { font-size: var(--text-xl); }
 h2 { font-size: var(--text-lg); }
 h3 { font-size: var(--text-md); }
 
@@ -55,7 +86,7 @@ a {
 }
 
 a:hover {
-    color: var(--color-primary-hover);
+    color: var(--color-primary-text-hover);
 }
 
 :focus-visible {

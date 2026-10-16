@@ -1,0 +1,7 @@
+Hi {{ first_name }},
+
+Welcome to {{ app_name }}. Choose a password to finish creating your account. The link works once and expires in {{ hours }} hours:
+
+{{ link }}
+
+If you didn't sign up, ignore this email: the account can't be used without this step.

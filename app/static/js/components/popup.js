@@ -11,19 +11,29 @@ export function createPopup({ trigger, panel, preferredHeight = 320, onDismiss }
 
     function place() {
         const rect = trigger.getBoundingClientRect();
-        const width = Math.min(rect.width, window.innerWidth - 2 * MARGIN);
-        const left = Math.min(Math.max(MARGIN, rect.left), window.innerWidth - width - MARGIN);
-        const below = window.innerHeight - rect.bottom - GAP - MARGIN;
+        const viewWidth = window.innerWidth;
+        const viewHeight = window.visualViewport?.height ?? window.innerHeight; // shrinks when a phone keyboard opens
+
+        // Measure the panel as it really is (a calendar is wider than its trigger), then fit it to the screen.
+        panel.style.setProperty("--popup-width", `${Math.min(rect.width, viewWidth - 2 * MARGIN)}px`);
+        panel.style.setProperty("--popup-max-height", "none");
+        const width = panel.offsetWidth;
+        const natural = Math.min(panel.offsetHeight, preferredHeight);
+
+        let left = rect.left;
+        if (left + width > viewWidth - MARGIN) left = rect.right - width; // grow leftwards from the trigger's right edge
+        left = Math.min(Math.max(MARGIN, left), Math.max(MARGIN, viewWidth - width - MARGIN));
+
+        const below = viewHeight - rect.bottom - GAP - MARGIN;
         const above = rect.top - GAP - MARGIN;
-        const placement = below >= Math.min(preferredHeight, 240) || below >= above ? "bottom" : "top";
+        const placement = natural <= below || below >= above ? "bottom" : "top";
         const room = placement === "bottom" ? below : above;
 
         panel.dataset.placement = placement;
         panel.style.setProperty("--popup-left", `${left}px`);
-        panel.style.setProperty("--popup-width", `${width}px`);
-        panel.style.setProperty("--popup-max-height", `${Math.max(160, Math.min(preferredHeight, room))}px`);
+        panel.style.setProperty("--popup-max-height", `${Math.max(160, Math.min(natural, room))}px`);
         if (placement === "bottom") panel.style.setProperty("--popup-top", `${rect.bottom + GAP}px`);
-        else panel.style.setProperty("--popup-bottom", `${window.innerHeight - rect.top + GAP}px`);
+        else panel.style.setProperty("--popup-bottom", `${viewHeight - rect.top + GAP}px`);
     }
 
     function onPointerDown(event) {
@@ -36,12 +46,14 @@ export function createPopup({ trigger, panel, preferredHeight = 320, onDismiss }
 
     function show() {
         if (isOpen) return;
+        trigger.scrollIntoView({ block: "nearest" }); // a field scrolled out of a long form comes into view first
         panel.showPopover();
         isOpen = true;
         place();
         document.addEventListener("pointerdown", onPointerDown, true);
         document.addEventListener("scroll", onScroll, true);
         window.addEventListener("resize", place);
+        window.visualViewport?.addEventListener("resize", place);
     }
 
     function hide() {
@@ -51,6 +63,7 @@ export function createPopup({ trigger, panel, preferredHeight = 320, onDismiss }
         document.removeEventListener("pointerdown", onPointerDown, true);
         document.removeEventListener("scroll", onScroll, true);
         window.removeEventListener("resize", place);
+        window.visualViewport?.removeEventListener("resize", place);
     }
 
     // A popup left open inside a dialog must not outlive it.

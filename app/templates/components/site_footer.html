@@ -1,8 +1,27 @@
+{% from "components/macros.html" import brand_logo %}
 <footer class="site-footer">
-    <div class="container site-footer__inner">
-        <span>&copy; {{ copyright_year }} <span class="brand-name">{{ app_name }}</span></span>
-        {% if not is_production %}
-        <a href="{{ url_for('main.diagnostics') }}">Diagnostics (development only)</a>
-        {% endif %}
+    <div class="container">
+        <div class="site-footer__row">
+            <a class="brand" href="{{ url_for('main.landing') }}">
+                {{ brand_logo() }}
+                <span class="brand-name">{{ app_name }}</span>
+            </a>
+            <nav class="site-footer__nav" aria-label="Footer">
+                <a href="{{ url_for('main.landing') }}#features">Features</a>
+                <a href="{{ url_for('main.landing') }}#how-it-works">How it works</a>
+                {% if current_user() %}
+                <a href="{{ url_for('finance_pages.dashboard_page') }}">Dashboard</a>
+                {% else %}
+                <a href="{{ url_for('auth_pages.login_page') }}">Sign in</a>
+                <a href="{{ url_for('auth_pages.login_page', tab='register') }}">Create account</a>
+                {% endif %}
+            </nav>
+        </div>
+        <div class="site-footer__legal">
+            <span>&copy; {{ copyright_year }} <span class="brand-name">{{ app_name }}</span></span>
+            {% if not is_production %}
+            <a href="{{ url_for('main.diagnostics') }}">Diagnostics (development only)</a>
+            {% endif %}
+        </div>
     </div>
 </footer>

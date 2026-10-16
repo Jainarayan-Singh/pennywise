@@ -1,0 +1,8 @@
+{% extends "emails/_layout.html" %}
+{% from "emails/_button.html" import button %}
+{% block body %}
+<p style="margin:0 0 12px 0;">Hi {{ first_name }},</p>
+<p style="margin:0 0 12px 0;">Welcome to {{ app_name }}. Choose a password to finish creating your account.</p>
+{{ button(link, "Choose your password") }}
+<p style="margin:0;font-size:14px;line-height:22px;color:#6f6a62;">This link works once and expires in {{ hours }} hours. If you didn&rsquo;t sign up, ignore this email: the account can&rsquo;t be used without this step.</p>
+{% endblock %}

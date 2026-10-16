@@ -42,7 +42,7 @@ class EmailDeliveryError(RuntimeError):
 
 
 class EmailSender(Protocol):
-    def send(self, to_address: str, subject: str, body: str, to_name: str = "") -> None: ...
+    def send(self, to_address: str, subject: str, body: str, to_name: str = "", html: str | None = None) -> None: ...
 
 
 class ApiEmailSender:
@@ -54,20 +54,20 @@ class ApiEmailSender:
         self._template = json.loads(self._config.payload_template)  # validated at startup
         self._opener = opener
 
-    def build_payload(self, to_address: str, to_name: str, subject: str, body: str) -> bytes:
+    def build_payload(self, to_address: str, to_name: str, subject: str, body: str, html: str | None = None) -> bytes:
         values = {
             "from_email": self._config.from_email, "to_email": to_address, "to_name": to_name, "subject": subject,
-            "text": body, "html": _html(body), "app_name": self._app_name,
+            "text": body, "html": html or _html(body), "app_name": self._app_name,
         }
         # Placeholders are filled in after parsing, so quotes, newlines and braces in a value can never break the JSON.
         return json.dumps(_fill(self._template, values)).encode()
 
-    def send(self, to_address: str, subject: str, body: str, to_name: str = "") -> None:
+    def send(self, to_address: str, subject: str, body: str, to_name: str = "", html: str | None = None) -> None:
         config = self._config
         prefix = config.auth_prefix + " " if config.auth_prefix and not config.auth_prefix.endswith(" ") else config.auth_prefix
         request = urllib.request.Request(
             config.service_url,
-            data=self.build_payload(to_address, to_name or to_address.split("@")[0], subject, body),
+            data=self.build_payload(to_address, to_name or to_address.split("@")[0], subject, body, html),
             method="POST",
             headers={config.auth_header: f"{prefix}{config.api_key}", "Content-Type": "application/json", "Accept": "application/json"},
         )
@@ -125,11 +125,13 @@ class OutboxEmailSender:
     def __init__(self, folder: Path):
         self._folder = folder
 
-    def send(self, to_address: str, subject: str, body: str, to_name: str = "") -> None:
+    def send(self, to_address: str, subject: str, body: str, to_name: str = "", html: str | None = None) -> None:
         self._folder.mkdir(parents=True, exist_ok=True)
         stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f")
         path = self._folder / f"{stamp}.txt"
         path.write_text(f"To: {to_address}\nSubject: {subject}\n\n{body}\n", encoding="utf-8")
+        if html:  # open this file in a browser to see the message as a mail client would show it
+            path.with_suffix(".html").write_text(html, encoding="utf-8")
         logger.info("Development email to %s written to %s", to_address, path)
 
 
@@ -138,10 +140,14 @@ def build_email_sender(settings: Settings, instance_path: str) -> EmailSender:
         return ApiEmailSender(settings)
     return OutboxEmailSender(Path(instance_path) / "outbox")
 
-def deliver(app: Flask, to_address: str, subject: str, body: str, to_name: str = "") -> None:
+def deliver(app: Flask, to_address: str, subject: str, body: str, to_name: str = "", html: str | None = None) -> None:
     """Send now and raise EmailDeliveryError if it did not go out. Never pretends a failed send succeeded."""
     try:
-        app.extensions["email_sender"].send(to_address, subject, body, to_name)
+        sender = app.extensions["email_sender"]
+        if html is None:
+            sender.send(to_address, subject, body, to_name)
+        else:
+            sender.send(to_address, subject, body, to_name, html=html)
     except EmailDeliveryError as error:
         logger.error("Email to %s was not delivered (%s).", to_address, error.reason)
         raise

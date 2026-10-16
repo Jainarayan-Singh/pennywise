@@ -1,7 +1,7 @@
 function setupMenu(menu) {
     const trigger = menu.querySelector("[data-menu-trigger]");
     const panel = menu.querySelector("[data-menu-panel]");
-    const items = () => [...panel.querySelectorAll('[role="menuitem"]')];
+    const items = () => [...panel.querySelectorAll('[role^="menuitem"]')];
 
     function setOpen(open, { focus } = {}) {
         panel.hidden = !open;
@@ -41,7 +41,7 @@ function setupMenu(menu) {
     });
 
     panel.addEventListener("click", (event) => {
-        if (event.target.closest('[role="menuitem"]')) setOpen(false, { focus: "trigger" });
+        if (event.target.closest('[role^="menuitem"]')) setOpen(false, { focus: "trigger" });
     });
 
     document.addEventListener("click", (event) => {

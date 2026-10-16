@@ -1,0 +1,7 @@
+Hi {{ first_name }},
+
+We received a request to reset your {{ app_name }} password. Use this link to choose a new one. It works once and expires in {{ minutes }} minutes:
+
+{{ link }}
+
+If you didn't ask for this, ignore this email and your password stays the same.

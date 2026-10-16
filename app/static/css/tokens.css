@@ -2,26 +2,30 @@
  * Design tokens. Every colour is declared once with light-dark(), so a single palette serves both
  * themes: the OS preference by default, or the explicit choice set via <html data-theme>.
  * Requires a browser with light-dark() support (Chrome/Edge 123+, Safari 17.5+, Firefox 120+).
+ *
+ * The palette, type, radii and shell metrics follow the Smart AI Exam Portal (static/theme.css): a charcoal /
+ * paper surface stack with hairline borders, one blue accent, compact type and 10px controls.
  */
 :root {
     color-scheme: light dark;
 
-    --font-sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-display: "Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
     --font-mono: ui-monospace, "Cascadia Code", Consolas, monospace;
 
     --text-xs: 0.75rem;
     --text-sm: 0.875rem;
-    --text-md: 1rem;
-    --text-lg: 1.125rem;
+    --text-md: 0.9375rem;
+    --text-lg: 1.0625rem;
     --text-xl: 1.375rem;
-    --text-2xl: 1.75rem;
-    --text-3xl: clamp(2.25rem, 5vw, 3.5rem);
+    --text-2xl: 1.875rem;
+    --text-3xl: clamp(2.25rem, 1.5rem + 3.6vw, 3.75rem);
     --weight-regular: 400;
     --weight-medium: 500;
     --weight-semibold: 600;
     --weight-bold: 700;
     --leading-tight: 1.2;
-    --leading-normal: 1.55;
+    --leading-normal: 1.5;
 
     --space-1: 0.25rem;
     --space-2: 0.5rem;
@@ -34,58 +38,67 @@
 
     --radius-sm: 0.375rem;
     --radius-md: 0.625rem;
-    --radius-lg: 0.875rem;
-    --radius-xl: 1.25rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 0.875rem;
     --radius-full: 999px;
 
-    --color-bg: light-dark(#f5f6f8, #0a0e13);
-    --color-surface: light-dark(#ffffff, #121820);
-    --color-surface-raised: light-dark(#ffffff, #19212b);
-    --color-surface-sunken: light-dark(#eef0f4, #0e141b);
-    --color-border: light-dark(#e2e5eb, #232c38);
-    --color-border-strong: light-dark(#c4cad5, #384455);
+    /* Surfaces: page, cards, nested/hover surface, and form fields. */
+    --color-bg: light-dark(#f4f5f7, #0c0c10);
+    --color-surface: light-dark(#ffffff, #16161d);
+    --color-surface-raised: light-dark(#ffffff, #16161d);
+    --color-surface-sunken: light-dark(#f4f5f7, #1c1c25);
+    --color-field: light-dark(#ffffff, #111116);
+    --color-border: light-dark(#e1e4e8, rgb(255 255 255 / 0.07));
+    --color-border-strong: light-dark(#c9cfd6, rgb(255 255 255 / 0.16));
 
-    --color-text: light-dark(#111827, #e9eef5);
-    --color-text-muted: light-dark(#4a5465, #a5b0c0);
-    --color-text-subtle: light-dark(#667085, #8794a8);
+    --color-text: light-dark(#111827, #f1f3f9);
+    --color-text-muted: light-dark(#4b5563, rgb(241 243 249 / 0.6));
+    --color-text-subtle: light-dark(#6b7280, rgb(241 243 249 / 0.45));
 
-    --color-primary: light-dark(#0f766e, #2dd4bf);
-    --color-primary-hover: light-dark(#115e59, #5eead4);
-    --color-primary-soft: light-dark(#e3f3f1, #123331);
-    --color-primary-text: light-dark(#0f766e, #5eead4);
+    --color-primary: #4c6ef5;
+    --color-primary-hover: #3b5bdb;
+    --color-primary-soft: light-dark(rgb(76 110 245 / 0.08), rgb(76 110 245 / 0.14));
+    --color-primary-text: light-dark(#3b5bdb, #8da2fb);
+    --color-primary-text-hover: light-dark(#2f4ac2, #b2befd);
+    --color-on-primary: #ffffff;
 
-    /* Charts: income emerald, spending coral, savings teal; categories are told apart by hue and legend. */
-    --chart-income: light-dark(#059669, #34d399);
-    --chart-expense: light-dark(#e0524a, #ff7b72);
-    --chart-savings: light-dark(#0d9488, #2dd4bf);
-    --chart-cat-1: light-dark(#0d9488, #2dd4bf);
-    --chart-cat-2: light-dark(#4f46e5, #818cf8);
-    --chart-cat-3: light-dark(#d97706, #fbbf24);
-    --chart-cat-4: light-dark(#db2777, #f472b6);
-    --chart-cat-5: light-dark(#0284c7, #38bdf8);
-    --chart-cat-6: light-dark(#64748b, #94a3b8);
+    /* Charts: income green, spending red, savings in the accent; categories are told apart by hue and legend. */
+    --chart-income: light-dark(#2f9e44, #51cf66);
+    --chart-expense: light-dark(#e03131, #ff6b6b);
+    --chart-savings: light-dark(#4c6ef5, #748ffc);
+    --chart-cat-1: light-dark(#4c6ef5, #748ffc);
+    --chart-cat-2: light-dark(#9c36b5, #da77f2);
+    --chart-cat-3: light-dark(#e67700, #fcc419);
+    --chart-cat-4: light-dark(#0c8599, #3bc9db);
+    --chart-cat-5: light-dark(#d6336c, #f783ac);
+    --chart-cat-6: light-dark(#868e96, #adb5bd);
 
     /* Loading screen: how long the progress animation runs (colours come from the theme tokens). */
     --splash-duration: 1700ms;
-    --color-on-primary: light-dark(#ffffff, #042f2e);
 
-    --color-success: light-dark(#15803d, #4ade80);
-    --color-success-soft: light-dark(#e6f5ec, #13301f);
-    --color-warning: light-dark(#a15c07, #fbbf24);
-    --color-warning-soft: light-dark(#fcf1d9, #352a0c);
-    --color-danger: light-dark(#b42318, #f87171);
-    --color-danger-hover: light-dark(#912018, #fca5a5);
-    --color-danger-soft: light-dark(#fdeceb, #3b1717);
-    --color-on-danger: light-dark(#ffffff, #2a0a0a);
-    --color-info: light-dark(#1d4ed8, #7cb0ff);
-    --color-info-soft: light-dark(#e7eefc, #15253f);
+    --color-success: light-dark(#2b8a3e, #8ce99a);
+    --color-success-soft: light-dark(#ebfbee, rgb(47 158 68 / 0.12));
+    --color-success-border: light-dark(#b2f2bb, rgb(47 158 68 / 0.3));
+    --color-warning: light-dark(#b45309, #ffd43b);
+    --color-warning-soft: light-dark(#fff9db, rgb(230 119 0 / 0.12));
+    --color-warning-border: light-dark(#ffe066, rgb(230 119 0 / 0.3));
+    --color-danger: light-dark(#c92a2a, #ff8787);
+    --color-danger-solid: #e03131;
+    --color-danger-hover: #c92a2a;
+    --color-danger-soft: light-dark(#fff5f5, rgb(224 49 49 / 0.12));
+    --color-danger-border: light-dark(#ffc9c9, rgb(224 49 49 / 0.3));
+    --color-on-danger: #ffffff;
+    --color-info: light-dark(#1864ab, #74c0fc);
+    --color-info-soft: light-dark(#e7f5ff, rgb(25 113 194 / 0.12));
+    --color-info-border: light-dark(#a5d8ff, rgb(25 113 194 / 0.3));
 
-    --color-focus: light-dark(#0f766e, #5eead4);
-    --color-overlay: light-dark(rgb(15 23 42 / 0.5), rgb(0 0 0 / 0.68));
+    --color-focus: #4c6ef5;
+    --color-focus-ring: light-dark(rgb(76 110 245 / 0.14), rgb(76 110 245 / 0.28));
+    --color-overlay: rgb(0 0 0 / 0.55);
 
-    --shadow-sm: 0 1px 2px light-dark(rgb(16 24 40 / 0.06), rgb(0 0 0 / 0.45));
-    --shadow-md: 0 6px 16px -4px light-dark(rgb(16 24 40 / 0.1), rgb(0 0 0 / 0.5));
-    --shadow-lg: 0 20px 48px -12px light-dark(rgb(16 24 40 / 0.22), rgb(0 0 0 / 0.7));
+    --shadow-sm: light-dark(0 1px 3px rgb(0 0 0 / 0.06), 0 1px 4px rgb(0 0 0 / 0.5));
+    --shadow-md: light-dark(0 4px 16px rgb(0 0 0 / 0.08), 0 4px 20px rgb(0 0 0 / 0.5));
+    --shadow-lg: light-dark(0 12px 40px rgb(0 0 0 / 0.12), 0 12px 48px rgb(0 0 0 / 0.6));
 
     --focus-ring-width: 2px;
     --focus-ring-offset: 2px;
@@ -102,13 +115,32 @@
     --transition-base: 200ms ease;
 
     --control-sm: 2rem;
-    --control-md: 2.5rem;
-    --control-lg: 3rem;
-    --header-height: 4rem;
-    --sidebar-width: 16.5rem;
+    --control-md: 2.375rem;
+    --control-lg: 2.875rem;
+    --header-height: 3rem;
+    --sidebar-width: 13.75rem;
+    --sidebar-rail: 3.25rem;
     --container-max: 72rem;
-    --container-narrow: 28rem;
-    --modal-width: 34rem;
+    --container-narrow: 27.5rem;
+    --content-narrow: 50rem;
+    --modal-width: 30rem;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+    /* Theme picker dots (the Exam Portal's .dot-* swatches). */
+    --swatch-light: #e8e6e0;
+    --swatch-dark: #111116;
+    --swatch-midnight: #7c6fff;
+    --swatch-emerald: #2f9e74;
+    --swatch-sunset: #b9572f;
+}
+
+/* Touch screens: controls are 44px tall, the size the platform guidelines ask for. */
+@media (max-width: 47.99rem), (pointer: coarse) {
+    :root {
+        --control-sm: 2.5rem;
+        --control-md: 2.75rem;
+        --control-lg: 3rem;
+    }
 }
 
 :root[data-theme="light"] {
@@ -117,4 +149,78 @@
 
 :root[data-theme="dark"] {
     color-scheme: dark;
+}
+
+/* Extra themes from the Exam Portal. Each one overrides the surface, text and accent tokens; status colours
+   (success, warning, danger, info) come from the dark or light palette its colour-scheme selects. */
+:root[data-theme="midnight"] {
+    color-scheme: dark;
+    --color-bg: #080b18;
+    --color-surface: #0f1530;
+    --color-surface-raised: #0f1530;
+    --color-surface-sunken: #151e3a;
+    --color-field: #0d1124;
+    --color-border: rgb(124 111 255 / 0.14);
+    --color-border-strong: rgb(124 111 255 / 0.28);
+    --color-text: #e4e8f5;
+    --color-text-muted: rgb(228 232 245 / 0.62);
+    --color-text-subtle: rgb(228 232 245 / 0.45);
+    --color-primary: #7c6fff;
+    --color-primary-hover: #6a5dee;
+    --color-primary-soft: rgb(124 111 255 / 0.14);
+    --color-primary-text: #a79fff;
+    --color-primary-text-hover: #c4bfff;
+    --color-focus: #7c6fff;
+    --color-focus-ring: rgb(124 111 255 / 0.28);
+    --chart-savings: #9d93ff;
+    --chart-cat-1: #9d93ff;
+    --chart-cat-2: #f783ac;
+}
+
+:root[data-theme="emerald"] {
+    color-scheme: dark;
+    --color-bg: #0c130f;
+    --color-surface: #16211b;
+    --color-surface-raised: #16211b;
+    --color-surface-sunken: #1c2a22;
+    --color-field: #121a16;
+    --color-border: rgb(255 255 255 / 0.07);
+    --color-border-strong: rgb(255 255 255 / 0.16);
+    --color-text: #e9f2ed;
+    --color-text-muted: rgb(233 242 237 / 0.64);
+    --color-text-subtle: rgb(233 242 237 / 0.45);
+    --color-primary: #2f9e74;
+    --color-primary-hover: #267d5c;
+    --color-primary-soft: rgb(47 158 116 / 0.16);
+    --color-primary-text: #5fd3a8;
+    --color-primary-text-hover: #8fe5c6;
+    --color-focus: #2f9e74;
+    --color-focus-ring: rgb(47 158 116 / 0.3);
+    --chart-savings: #5fd3a8;
+    --chart-cat-1: #5fd3a8;
+    --chart-cat-2: #748ffc;
+}
+
+:root[data-theme="sunset"] {
+    color-scheme: light;
+    --color-bg: #f0eee6;
+    --color-surface: #faf9f5;
+    --color-surface-raised: #faf9f5;
+    --color-surface-sunken: #eae6da;
+    --color-field: #ffffff;
+    --color-border: #e3ddce;
+    --color-border-strong: #cfc7b2;
+    --color-text: #2d2a26;
+    --color-text-muted: rgb(45 42 38 / 0.74);
+    --color-text-subtle: rgb(45 42 38 / 0.56);
+    --color-primary: #b9572f;
+    --color-primary-hover: #9f4727;
+    --color-primary-soft: rgb(185 87 47 / 0.1);
+    --color-primary-text: #a64a28;
+    --color-primary-text-hover: #86391c;
+    --color-focus: #b9572f;
+    --color-focus-ring: rgb(185 87 47 / 0.22);
+    --chart-savings: #b9572f;
+    --chart-cat-1: #b9572f;
+    --chart-cat-2: #4c6ef5;
 }

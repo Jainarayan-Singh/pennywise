@@ -10,7 +10,7 @@ All settings are read once, in `app/config/settings.py`, from environment variab
 | `LOG_LEVEL` | `INFO` | Python log level |
 | `APP_NAME` | `Advanced Expense Tracker` | Name shown in titles, headers, footers, the loading screen, error pages and emails |
 | `COPYRIGHT_YEAR` | current year | Year in the footer; change it here, never in code |
-| `APP_BRAND_FONT` | `Playfair Display Italic` | Font for the product name only. One of the eight names in "Brand font" below; anything else stops startup and lists the valid names. Restart the server after changing it |
+| `APP_BRAND_FONT` | `Source Serif` | Font for the product name only. One of the nine names in "Brand font" below; anything else stops startup and lists the valid names. Restart the server after changing it |
 | `EMAIL_PROVIDER` | empty | Email API provider (`resend`). Empty writes emails to `instance/outbox/` for local development; **required in production** |
 | `EMAIL_API_KEY` | empty | The provider's API key. Server-side only: never in templates, scripts, API responses, logs or Git |
 | `EMAIL_FROM` | empty | Sender address on a domain you have verified with the provider; required when `EMAIL_PROVIDER` is set |
@@ -28,10 +28,11 @@ All settings are read once, in `app/config/settings.py`, from environment variab
 | `DEFAULT_CURRENCY` / `DEFAULT_TIMEZONE` | `INR` / `Asia/Kolkata` | Defaults for new accounts |
 
 ## Brand font
-`APP_BRAND_FONT` selects one of eight fonts for the product name (sidebar, header, footer, loading screen). It is a choice from a list, not CSS, so a typo is reported at startup instead of silently ignored. Matching ignores case, spaces and hyphens (`playfair-display-italic` works).
+`APP_BRAND_FONT` selects one of nine fonts for the product name (sidebar, header, footer, loading screen). It is a choice from a list, not CSS, so a typo is reported at startup instead of silently ignored. Matching ignores case, spaces and hyphens (`playfair-display-italic` works).
 
 | Value | Kind | Where it works | If it is missing |
 |---|---|---|---|
+| `Source Serif` (default) | bundled `.woff2`, upright | everywhere | n/a |
 | `Playfair Display Italic` | bundled `.woff2` | everywhere | n/a |
 | `Cormorant Garamond Italic` | bundled `.woff2` | everywhere | n/a |
 | `Lora Italic` | bundled `.woff2` | everywhere | n/a |
