@@ -23,12 +23,10 @@
 </div></div>
 {% else %}
 
-<section class="card assistant" aria-label="Conversation">
-    <div id="conversation" class="conversation" role="log" aria-live="polite">
-        <div class="bubble bubble--assistant">Tell me what you spent or earned, for example “Yesterday I paid 1200 for petrol”. I'll ask only for what's missing.</div>
-    </div>
+<section class="card assistant" aria-label="Quick add">
+    <div id="conversation" class="conversation" role="log" aria-live="polite"></div>
 
-    {% if voice_enabled %}
+{% if voice_enabled %}
     <div id="recorder" class="recorder" hidden>
         <span class="rec-dot" aria-hidden="true"></span>
         <span id="recorder-time" class="recorder__time" aria-hidden="true">0:00</span>
@@ -43,7 +41,7 @@
     <form id="composer" class="composer" novalidate>
         <label class="visually-hidden" for="composer-text">Describe an expense or income</label>
         <textarea class="textarea" id="composer-text" name="text" rows="3" maxlength="{{ max_chars }}"
-                  placeholder="e.g. Today I spent 250 rupees on lunch" autocomplete="off"></textarea>
+                  placeholder="Describe an expense or income" autocomplete="off"></textarea>
         <div class="composer__bar">
             <span class="composer__hint">Enter to send · Shift+Enter for a new line</span>
             <div class="composer__actions">
@@ -55,12 +53,6 @@
             </div>
         </div>
     </form>
-    <div class="chips" aria-label="Examples">
-        <span class="chips__label">Try</span>
-        <button class="chip" type="button" data-example="Today I spent 250 rupees on lunch">Today I spent 250 rupees on lunch</button>
-        <button class="chip" type="button" data-example="Yesterday I paid 1200 for petrol">Yesterday I paid 1200 for petrol</button>
-        <button class="chip" type="button" data-example="Kal 350 rupaye chai aur snacks pe kharch kiye">Kal 350 rupaye chai aur snacks pe kharch kiye</button>
-    </div>
     <p class="assistant__manual"><a href="{{ url_for('finance_pages.transactions_page', new=1) }}">Add manually instead</a></p>
 </section>
 
@@ -70,7 +62,6 @@
         <span id="draft-status" class="badge"></span>
     </div>
     <dl id="draft-rows" class="draft-rows"></dl>
-    <p id="draft-hint" class="muted small" hidden></p>
     <div class="draft-actions">
         <button id="confirm-button" class="btn btn--primary" type="button">Confirm &amp; save</button>
         <button id="edit-button" class="btn btn--secondary" type="button">{{ icon("pencil") }}Edit details</button>

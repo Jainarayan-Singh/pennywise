@@ -27,53 +27,93 @@
         </div>
     </section>
 
-    <section class="container showcase" aria-label="Product preview">
-        <figure class="preview" role="img" aria-label="Preview of the dashboard, using sample data">
-            <div class="preview__bar" aria-hidden="true">
-                <span class="preview__title">Dashboard</span>
-                <span class="preview__range">This month</span>
-            </div>
-            <div class="preview__body" aria-hidden="true">
-                <div class="preview__tiles">
-                    <div class="preview__tile">
-                        <span class="preview__label">{{ icon("arrow-down") }}Income</span>
-                        <strong>&#8377;87,500</strong>
+    {% if ai_enabled %}
+    <section class="section" id="how-it-works" aria-labelledby="flow-title">
+        <div class="container">
+            <header class="section__head">
+                <h2 id="flow-title">From a sentence to a saved transaction</h2>
+                <p>Describe what happened. {{ app_name }} works out the details, asks only about what is missing, and saves nothing until you confirm.</p>
+            </header>
+            <ol class="flow">
+                <li class="flow__step">
+                    <span class="flow__node" aria-hidden="true">1</span>
+                    <div class="flow__body">
+                        <h3>Describe</h3>
+                        <p>Write what you spent or received{% if voice_enabled %}, or say it aloud{% endif %}.</p>
                     </div>
-                    <div class="preview__tile">
-                        <span class="preview__label">{{ icon("arrow-up") }}Expenses</span>
-                        <strong>&#8377;36,408</strong>
+                    <div class="flow__art" aria-hidden="true">
+                        <div class="art-bubble art-bubble--input"><span>Describe an expense or income</span>{% if voice_enabled %}{{ icon("mic") }}{% endif %}</div>
                     </div>
-                    <div class="preview__tile">
-                        <span class="preview__label">{{ icon("trend-up") }}Savings</span>
-                        <strong>&#8377;51,092</strong>
+                </li>
+                <li class="flow__step">
+                    <span class="flow__node" aria-hidden="true">2</span>
+                    <div class="flow__body">
+                        <h3>Understand</h3>
+                        <p>It picks out the type, amount, date, category and account you mentioned.</p>
                     </div>
-                </div>
-                <div class="preview__columns">
-                    <div class="preview__panel">
-                        <h3>Recent transactions</h3>
-                        <ul class="preview__list">
-                            <li><div><strong>Acme Corp salary</strong><span>Salary &middot; HDFC Savings</span></div><b class="amount--income">+&#8377;85,000</b></li>
-                            <li><div><strong>Monthly rent</strong><span>Bills &amp; Utilities &middot; HDFC Savings</span></div><b class="amount--expense">&minus;&#8377;12,450</b></li>
-                            <li><div><strong>Groceries</strong><span>Food &amp; Dining &middot; Cash</span></div><b class="amount--expense">&minus;&#8377;1,860</b></li>
-                            <li><div><strong>Electricity and internet</strong><span>Bills &amp; Utilities &middot; HDFC Savings</span></div><b class="amount--expense">&minus;&#8377;4,999</b></li>
+                    <div class="flow__art" aria-hidden="true">
+                        <ul class="art-fields">
+                            <li><i class="dot dot--known"></i>Type</li>
+                            <li><i class="dot dot--known"></i>Amount</li>
+                            <li><i class="dot dot--known"></i>Date</li>
+                            <li><i class="dot dot--inferred"></i>Category</li>
+                            <li><i class="dot dot--missing"></i>Account</li>
                         </ul>
                     </div>
-                    <div class="preview__panel">
-                        <h3>Where your money went</h3>
-                        <ul class="preview__bars">
-                            <li><span>Bills &amp; Utilities</span><i class="preview__fill preview__fill--1"></i><b>46%</b></li>
-                            <li><span>Shopping</span><i class="preview__fill preview__fill--2"></i><b>28%</b></li>
-                            <li><span>Food &amp; Dining</span><i class="preview__fill preview__fill--3"></i><b>14%</b></li>
-                            <li><span>Other</span><i class="preview__fill preview__fill--4"></i><b>12%</b></li>
+                </li>
+                <li class="flow__step">
+                    <span class="flow__node" aria-hidden="true">3</span>
+                    <div class="flow__body">
+                        <h3>Clarify</h3>
+                        <p>If something is missing or unclear, it asks one short question.</p>
+                    </div>
+                    <div class="flow__art" aria-hidden="true">
+                        <div class="art-bubble">Which account?</div>
+                        <div class="art-chips"><span>Account A</span><span>Account B</span></div>
+                    </div>
+                </li>
+                <li class="flow__step">
+                    <span class="flow__node" aria-hidden="true">4</span>
+                    <div class="flow__body">
+                        <h3>Prepare</h3>
+                        <p>Categories and accounts are matched to your own. Nothing is invented.</p>
+                    </div>
+                    <div class="flow__art" aria-hidden="true">
+                        <div class="art-match">{{ icon("tag") }}<span>Your categories</span>{{ icon("check") }}</div>
+                        <div class="art-match">{{ icon("wallet") }}<span>Your accounts</span>{{ icon("check") }}</div>
+                    </div>
+                </li>
+                <li class="flow__step">
+                    <span class="flow__node" aria-hidden="true">5</span>
+                    <div class="flow__body">
+                        <h3>Review</h3>
+                        <p>You see everything it understood, and can change any detail.</p>
+                    </div>
+                    <div class="flow__art" aria-hidden="true">
+                        <ul class="art-rows">
+                            <li><span>Type</span><i class="bar bar--40"></i></li>
+                            <li><span>Amount</span><i class="bar bar--55"></i></li>
+                            <li><span>Date</span><i class="bar bar--45"></i></li>
+                            <li><span>Category</span><i class="bar bar--60"></i></li>
                         </ul>
                     </div>
-                </div>
-            </div>
-            <figcaption>Sample data. Your dashboard shows your own transactions.</figcaption>
-        </figure>
+                </li>
+                <li class="flow__step">
+                    <span class="flow__node" aria-hidden="true">6</span>
+                    <div class="flow__body">
+                        <h3>Confirm</h3>
+                        <p>The transaction is saved only after you confirm it.</p>
+                    </div>
+                    <div class="flow__art" aria-hidden="true">
+                        <span class="art-button">Confirm &amp; save</span>
+                    </div>
+                </li>
+            </ol>
+        </div>
     </section>
+    {% endif %}
 
-    <section class="section" id="features" aria-labelledby="features-title">
+    <section class="section{% if ai_enabled %} section--tint{% endif %}" id="features" aria-labelledby="features-title">
         <div class="container">
             <header class="section__head">
                 <h2 id="features-title">What you can do</h2>
@@ -100,17 +140,11 @@
                     <h3>Find anything quickly</h3>
                     <p>Filter by date, category, account or amount, search your notes, and get totals for exactly what you selected.</p>
                 </article>
-                {% if ai_enabled %}
-                <article class="feature feature--wide">
-                    <span class="feature__icon">{{ icon("sparkles") }}</span>
-                    <h3>Add by typing{% if voice_enabled %} or speaking{% endif %}</h3>
-                    <p>Describe a transaction in your own words, such as &ldquo;Yesterday I paid 1200 for petrol&rdquo;. You check the details before anything is saved.</p>
-                </article>
-                {% endif %}
             </div>
         </div>
     </section>
 
+    {% if not ai_enabled %}
     <section class="section section--tint" id="how-it-works" aria-labelledby="steps-title">
         <div class="container">
             <header class="section__head">
@@ -123,6 +157,7 @@
             </ol>
         </div>
     </section>
+    {% endif %}
 
     {% if not signed_in %}
     <section class="section" aria-labelledby="cta-title">

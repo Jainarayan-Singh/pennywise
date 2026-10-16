@@ -83,11 +83,11 @@
     --color-warning-soft: light-dark(#fff9db, rgb(230 119 0 / 0.12));
     --color-warning-border: light-dark(#ffe066, rgb(230 119 0 / 0.3));
     --color-danger: light-dark(#c92a2a, #ff8787);
-    --color-danger-solid: #e03131;
-    --color-danger-hover: #c92a2a;
+    --color-danger-solid: light-dark(#d63a3a, #e5484d);
+    --color-danger-hover: light-dark(#b52f2f, #cf3a3f);
     --color-danger-soft: light-dark(#fff5f5, rgb(224 49 49 / 0.12));
     --color-danger-border: light-dark(#ffc9c9, rgb(224 49 49 / 0.3));
-    --color-on-danger: #ffffff;
+    --color-on-danger: #ffffff; /* text on a solid destructive fill; white clears 4.5:1 on every theme's solid red */
     --color-info: light-dark(#1864ab, #74c0fc);
     --color-info-soft: light-dark(#e7f5ff, rgb(25 113 194 / 0.12));
     --color-info-border: light-dark(#a5d8ff, rgb(25 113 194 / 0.3));
@@ -155,6 +155,23 @@
    (success, warning, danger, info) come from the dark or light palette its colour-scheme selects. */
 :root[data-theme="midnight"] {
     color-scheme: dark;
+    --color-overlay: rgb(5 7 20 / 0.72);
+    --color-success: #6ee7a8;
+    --color-success-soft: rgb(52 211 153 / 0.12);
+    --color-success-border: rgb(52 211 153 / 0.3);
+    --color-warning: #fbbf5a;
+    --color-warning-soft: rgb(251 191 90 / 0.12);
+    --color-warning-border: rgb(251 191 90 / 0.3);
+    --color-danger: #ff8fa3;
+    --color-danger-solid: #d6455d;
+    --color-danger-hover: #b8364c;
+    --color-danger-soft: rgb(214 69 93 / 0.14);
+    --color-danger-border: rgb(214 69 93 / 0.32);
+    --color-info: #8ab4ff;
+    --color-info-soft: rgb(138 180 255 / 0.12);
+    --color-info-border: rgb(138 180 255 / 0.3);
+    --chart-income: #6ee7a8;
+    --chart-expense: #ff8fa3;
     --color-bg: #080b18;
     --color-surface: #0f1530;
     --color-surface-raised: #0f1530;
@@ -179,6 +196,23 @@
 
 :root[data-theme="emerald"] {
     color-scheme: dark;
+    --color-overlay: rgb(5 12 8 / 0.72);
+    --color-success: #7ee2a8;
+    --color-success-soft: rgb(126 226 168 / 0.12);
+    --color-success-border: rgb(126 226 168 / 0.3);
+    --color-warning: #f0c05a;
+    --color-warning-soft: rgb(240 192 90 / 0.12);
+    --color-warning-border: rgb(240 192 90 / 0.3);
+    --color-danger: #ff9b8a;
+    --color-danger-solid: #d9553f;
+    --color-danger-hover: #bb4430;
+    --color-danger-soft: rgb(217 85 63 / 0.14);
+    --color-danger-border: rgb(217 85 63 / 0.32);
+    --color-info: #7cc4e8;
+    --color-info-soft: rgb(124 196 232 / 0.12);
+    --color-info-border: rgb(124 196 232 / 0.3);
+    --chart-income: #7ee2a8;
+    --chart-expense: #ff9b8a;
     --color-bg: #0c130f;
     --color-surface: #16211b;
     --color-surface-raised: #16211b;
@@ -203,6 +237,24 @@
 
 :root[data-theme="sunset"] {
     color-scheme: light;
+    /* Status colours: the warmer reds, ambers and greens of the Exam Portal's Sunset theme. */
+    --color-success: #2e7d32;
+    --color-success-soft: #e8f1e4;
+    --color-success-border: #c5dcbf;
+    --color-warning: #8f5f12;
+    --color-warning-soft: #f6ecd4;
+    --color-warning-border: #e6d3a1;
+    --color-danger: #a8321f;
+    --color-danger-solid: #c1432f;
+    --color-danger-hover: #a9361f;
+    --color-danger-soft: #f8e9e4;
+    --color-danger-border: #eac3b8;
+    --color-info: #2c5f8a;
+    --color-info-soft: #e6edf2;
+    --color-info-border: #bfd0de;
+    --color-overlay: rgb(45 42 38 / 0.5);
+    --chart-income: #3b8a47;
+    --chart-expense: #c1432f;
     --color-bg: #f0eee6;
     --color-surface: #faf9f5;
     --color-surface-raised: #faf9f5;

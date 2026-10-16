@@ -24,7 +24,6 @@ const els = {
     draftCard: document.getElementById("draft-card"),
     status: document.getElementById("draft-status"),
     rows: document.getElementById("draft-rows"),
-    hint: document.getElementById("draft-hint"),
     confirm: document.getElementById("confirm-button"),
     edit: document.getElementById("edit-button"),
     discard: document.getElementById("discard-button"),
@@ -90,6 +89,29 @@ function errorBubble(error) {
     els.conversation.scrollTop = els.conversation.scrollHeight;
 }
 
+function askQuestion(draft) {
+    if (!draft.question) return;
+    bubble("assistant", draft.question);
+    if (!draft.options?.length) return;
+    const group = document.createElement("div");
+    group.className = "options";
+    group.setAttribute("role", "group");
+    group.setAttribute("aria-label", "Choices");
+    for (const option of draft.options) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "chip";
+        button.textContent = option.label;
+        button.addEventListener("click", () => {
+            group.remove(); // one answer per question
+            submit(option.label);
+        });
+        group.append(button);
+    }
+    els.conversation.append(group);
+    els.conversation.scrollTop = els.conversation.scrollHeight;
+}
+
 // ---------- draft card ----------
 
 function displayValue(row, currency) {
@@ -104,13 +126,13 @@ function displayValue(row, currency) {
     }
 }
 
-function sourceBadge(row) {
+function stateBadge(row) {
     const badge = document.createElement("span");
-    switch (row.source) {
+    switch (row.state) {
         case "missing": badge.className = "badge badge--danger"; badge.textContent = "Needed"; break;
-        case "inferred": badge.className = "badge badge--primary"; badge.textContent = `Suggested${row.note ? ` ${row.note}` : ""}`; break;
-        case "default": badge.className = "badge"; badge.textContent = "Default"; break;
-        case "rule": badge.className = "badge"; badge.textContent = row.note ?? "Resolved"; break;
+        case "ambiguous": badge.className = "badge badge--warning"; badge.textContent = "Choose one"; break;
+        case "inferred": badge.className = "badge badge--primary"; badge.textContent = row.note ? `Suggested · ${row.note}` : "Suggested"; break;
+        case "known": if (row.note) { badge.className = "badge"; badge.textContent = row.note; break; } return null;
         default: return null;
     }
     return badge;
@@ -126,8 +148,6 @@ function renderDraft(draft) {
     els.status.className = `badge ${ready ? "badge--success" : "badge--warning"}`;
     els.status.textContent = ready ? "Ready to save" : "Needs an answer";
     els.confirm.disabled = !ready;
-    els.hint.hidden = ready;
-    els.hint.textContent = "Answer the question above, or use Edit details, to continue.";
 
     els.rows.replaceChildren(...draft.fields.map((row) => {
         const wrapper = document.createElement("div");
@@ -142,7 +162,7 @@ function renderDraft(draft) {
         } else {
             description.append(text);
         }
-        const badge = sourceBadge(row);
+        const badge = stateBadge(row);
         if (badge) description.append(badge);
         wrapper.append(term, description);
         return wrapper;
@@ -155,10 +175,7 @@ function resetAssistant({ keepConversation = false } = {}) {
     els.draftCard.hidden = true;
     els.saved.hidden = true;
     els.text.value = "";
-    if (!keepConversation) {
-        els.conversation.replaceChildren();
-        bubble("assistant", "Tell me what you spent or earned. I'll ask only for what's missing.");
-    }
+    if (!keepConversation) els.conversation.replaceChildren();
     els.text.focus();
 }
 
@@ -173,8 +190,11 @@ function setComposerBusy(busy) {
 
 async function send(event) {
     event.preventDefault();
-    const text = els.text.value.trim();
-    if (!text) return;
+    await submit(els.text.value.trim());
+}
+
+async function submit(text) {
+    if (!text || els.send.disabled) return;
     bubble("user", text);
     const working = workingBubble();
     setComposerBusy(true);
@@ -185,8 +205,8 @@ async function send(event) {
         working.remove();
         els.text.value = "";
         state.fromVoice = false;
-        bubble("assistant", data.draft.question ?? "I have what I need. Please check the details below, then confirm to save.");
         renderDraft(data.draft);
+        askQuestion(data.draft);
     } catch (error) {
         working.remove();
         if (error.code === "draft_expired" || error.code === "draft_closed" || error.status === 404) {
@@ -236,7 +256,13 @@ async function confirmDraft() {
         toast.success("Transaction saved.");
     } catch (error) {
         toast.error(error.message);
-        if (error.details) toast.warning("Use Edit details to fix the highlighted problem, then confirm again.");
+        if (error.code === "draft_changed" || error.code === "draft_not_ready") {
+            const { draft } = await getJson(`/api/v1/ai/expense-drafts/${encodeURIComponent(state.draft.id)}`);
+            renderDraft(draft);
+            askQuestion(draft);
+        } else if (error.details) {
+            toast.warning("Use Edit details to fix the highlighted problem, then confirm again.");
+        }
         els.confirm.disabled = state.draft?.status !== "ready_for_review";
     } finally {
         els.confirm.removeAttribute("data-loading");
@@ -322,7 +348,7 @@ async function saveEdit(event) {
         els.editDialog.close();
         renderDraft(data.draft);
         toast.success("Details updated.");
-        if (data.draft.question) bubble("assistant", data.draft.question);
+        askQuestion(data.draft);
     } catch (error) {
         if (error.details) {
             showFieldErrors(els.editForm, error.details);
@@ -431,6 +457,7 @@ if (voiceFlag === "true") {
 
 // ---------- events and resume ----------
 
+els.text.value = ""; // browsers restore typed text on reload; the sent message belongs to the draft, not the box
 els.composer.addEventListener("submit", send);
 els.text.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
@@ -438,12 +465,6 @@ els.text.addEventListener("keydown", (event) => {
         els.composer.requestSubmit();
     }
 });
-for (const chip of document.querySelectorAll("[data-example]")) {
-    chip.addEventListener("click", () => {
-        els.text.value = chip.dataset.example;
-        els.text.focus();
-    });
-}
 els.confirm.addEventListener("click", confirmDraft);
 els.edit.addEventListener("click", openEdit);
 els.discard.addEventListener("click", discardDraft);
@@ -456,8 +477,8 @@ async function resume() {
     try {
         const { draft } = await getJson(`/api/v1/ai/expense-drafts/${encodeURIComponent(id)}`);
         if (draft.status === "needs_clarification" || draft.status === "ready_for_review") {
-            bubble("assistant", draft.question ?? "Welcome back. Your draft is ready to review below.");
             renderDraft(draft);
+            askQuestion(draft);
         } else {
             storage.clear();
         }

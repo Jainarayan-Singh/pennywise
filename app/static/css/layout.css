@@ -116,7 +116,7 @@
 }
 
 @media (max-width: 29.99rem) {
-    .site-header__get-started {
+    .btn.site-header__get-started {
         display: none;
     }
 }
