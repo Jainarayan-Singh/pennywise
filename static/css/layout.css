@@ -54,6 +54,12 @@
     }
 }
 
+@media (max-width: 47.99rem) {
+    .site-header__hub-name {
+        display: none;
+    }
+}
+
 .brand__video {
     display: block;
     flex: none;

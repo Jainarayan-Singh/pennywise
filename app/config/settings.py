@@ -78,6 +78,8 @@ class AppSettings:
     name: str = DEFAULT_APP_NAME
     copyright_year: int = field(default_factory=lambda: date.today().year)
     brand_font: str = DEFAULT_BRAND_FONT
+    hub_url: str = ""
+    hub_name: str = "Sarvadwar"
 
     @property
     def brand(self) -> BrandFont:
@@ -194,6 +196,8 @@ class Settings:
                 name=_str(env, "APP_NAME", DEFAULT_APP_NAME),
                 copyright_year=_int(env, "COPYRIGHT_YEAR", date.today().year, 1900),
                 brand_font=_str(env, "APP_BRAND_FONT", DEFAULT_BRAND_FONT),
+                hub_url=_str(env, "HUB_URL"),
+                hub_name=_str(env, "HUB_NAME", "Sarvadwar"),
             ),
             database=DatabaseSettings(
                 url=_str(env, "DATABASE_URL"),

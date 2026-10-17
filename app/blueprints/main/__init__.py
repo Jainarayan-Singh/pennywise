@@ -22,6 +22,8 @@ def _template_globals():
     settings = current_app.extensions["settings"]
     return {
         "app_name": settings.app.name,
+        "hub_url": settings.app.hub_url if settings.app.hub_url.startswith(("https://", "http://localhost")) else "",
+        "hub_name": settings.app.hub_name,
         "brand_css_version": _brand_stylesheet()["version"],
         "brand_font_preload": _brand_stylesheet()["preload"],
         "copyright_year": settings.app.copyright_year,
