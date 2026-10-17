@@ -1,0 +1,23 @@
+{% extends "layouts/document.html" %}
+{% block title %}Terms of Service · {{ app_name }}{% endblock %}
+{% block doc_title %}Terms of Service{% endblock %}
+{% block doc_body %}
+<p>By creating an account or using {{ app_name }} you agree to these terms.</p>
+<h2>Your account</h2>
+<p>You are responsible for keeping your password and passkeys safe and for what happens under your account. Use accurate details and do not share your account.</p>
+<h2>Your data</h2>
+<p>The records you enter are yours. You are responsible for their accuracy. {{ app_name }} is a record-keeping tool and does not give financial, tax or legal advice.</p>
+{% if ai_enabled %}
+<h2>AI suggestions</h2>
+<p>Quick add can misread what you wrote or said. Always check a draft before you confirm it; only confirmed transactions are saved.</p>
+{% endif %}
+<h2>Acceptable use</h2>
+<p>Do not try to access other people's data, disrupt the service, probe it for weaknesses without permission, or use it to break the law.</p>
+<h2>Availability</h2>
+<p>{{ app_name }} is provided as is, without warranties. It may be unavailable, changed or discontinued, so keep your own copy of anything important.</p>
+<h2>Ending your use</h2>
+<p>You can delete your account at any time (see <a href="{{ url_for('main.data_deletion') }}">Data deletion</a>). Accounts that break these terms may be suspended.</p>
+<h2>Changes</h2>
+<p>These terms may be updated. The date at the top shows the latest version; continued use means you accept it.</p>
+{% if contact_email %}<h2>Contact</h2><p><a href="mailto:{{ contact_email }}">{{ contact_email }}</a></p>{% endif %}
+{% endblock %}

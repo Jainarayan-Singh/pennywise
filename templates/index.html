@@ -144,20 +144,19 @@
         </div>
     </section>
 
-    {% if not ai_enabled %}
-    <section class="section section--tint" id="how-it-works" aria-labelledby="steps-title">
+    <section class="section{% if not ai_enabled %} section--tint{% endif %}" id="{{ 'manual-entry' if ai_enabled else 'how-it-works' }}" aria-labelledby="steps-title">
         <div class="container">
             <header class="section__head">
-                <h2 id="steps-title">How it works</h2>
+                <h2 id="steps-title">{% if ai_enabled %}Prefer to add it yourself?{% else %}How it works{% endif %}</h2>
+                <p>{% if ai_enabled %}Quick add is optional. Every transaction can also be entered by hand in a few seconds.{% else %}Enter each transaction by hand, then let the dashboard do the adding up.{% endif %}</p>
             </header>
             <ol class="steps__list">
-                <li><span class="steps__number">1</span><div><h3>Add</h3><p>Enter what you earned or spent as it happens.</p></div></li>
-                <li><span class="steps__number">2</span><div><h3>Organise</h3><p>Sort it into categories and accounts that fit your life.</p></div></li>
-                <li><span class="steps__number">3</span><div><h3>Review</h3><p>Check your totals and trends, and decide what to change.</p></div></li>
+                <li><span class="steps__number">1</span><div><h3>Add</h3><p>Open Transactions and choose Add transaction.</p></div></li>
+                <li><span class="steps__number">2</span><div><h3>Fill in the details</h3><p>Pick income or expense, then enter the amount, date, category and account. Merchant, payment method and notes are optional.</p></div></li>
+                <li><span class="steps__number">3</span><div><h3>Save</h3><p>It appears in your list straight away and your dashboard totals update.</p></div></li>
             </ol>
         </div>
     </section>
-    {% endif %}
 
     {% if not signed_in %}
     <section class="section" aria-labelledby="cta-title">

@@ -55,6 +55,11 @@
     --color-text-muted: light-dark(#4b5563, rgb(241 243 249 / 0.6));
     --color-text-subtle: light-dark(#6b7280, rgb(241 243 249 / 0.45));
 
+    --err-purple: #a855f7;
+    --err-cyan: #06b6d4;
+    --err-amber: #f59e0b;
+    --err-scanline: rgb(0 0 0 / 0.03);
+
     --color-primary: #4c6ef5;
     --color-primary-hover: #3b5bdb;
     --color-primary-soft: light-dark(rgb(76 110 245 / 0.08), rgb(76 110 245 / 0.14));

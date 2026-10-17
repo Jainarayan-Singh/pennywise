@@ -1,9 +1,11 @@
+import { navigateWithTransition } from "../core/page-transition.js";
 import { signOut } from "../core/logout.js";
 import { ApiRequestError, deleteJson, getJson } from "../services/api-client.js";
 import {
     correctOriginUrl, describePasskeyError, passkeysSupported, registerPasskey, showOriginNotice,
 } from "../services/passkey-client.js";
 import { confirmAction } from "../components/dialog.js";
+import { clearFieldErrors, setBusy, showFieldErrors } from "../components/form-helpers.js";
 import { icon } from "../components/icon.js";
 import { showSkeleton, showState } from "../components/state.js";
 import { toast } from "../components/toast.js";
@@ -88,6 +90,37 @@ async function removePasskey(passkey) {
 }
 
 document.getElementById("logout-all-button").addEventListener("click", () => signOut("everywhere"));
+
+const deleteDialog = document.getElementById("delete-account-dialog");
+const deleteForm = document.getElementById("delete-account-dialog-form");
+
+document.getElementById("delete-account-button").addEventListener("click", () => {
+    deleteForm.reset();
+    clearFieldErrors(deleteForm);
+    deleteDialog.showModal();
+});
+
+deleteForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    clearFieldErrors(deleteForm);
+    const email = deleteForm.elements.email.value;
+    setBusy(deleteForm, true);
+    try {
+        await deleteJson("/api/v1/auth/account", { body: { email } });
+        deleteDialog.close();
+        try {
+            sessionStorage.clear();
+        } catch {
+            // Storage may be unavailable; the account is already deleted.
+        }
+        navigateWithTransition("/", "Your account has been deleted…", () =>
+            toast.warning("Your account was deleted. Please reload the page."));
+    } catch (error) {
+        if (error.details) showFieldErrors(deleteForm, error.details);
+        else toast.error(error.message);
+        setBusy(deleteForm, false);
+    }
+});
 
 const wrongOrigin = correctOriginUrl();
 if (wrongOrigin) {

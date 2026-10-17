@@ -8,13 +8,16 @@ import secrets
 from datetime import timedelta
 
 from flask import current_app
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, update
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.config import Settings
 from app.extensions import db
-from app.models import PasswordResetToken, User, UserPreference
+from app.models import (
+    Account, AuditEvent, AuthChallenge, AuthSession, Category, ExpenseDraft, PasskeyCredential,
+    PasswordResetToken, Transaction, User, UserPreference,
+)
 from app.integrations.email import EmailDeliveryError, deliver
 from app.models.base import as_utc, utcnow
 from app.services.audit_service import record_event
@@ -233,3 +236,14 @@ def set_password(settings: Settings, token: str, new_password: str, confirm_pass
     db.session.commit()
     record_event("auth.account_activated" if first_time else "auth.password_reset_completed", user.id)
     return user
+
+def delete_account(user: User, confirmation_email: str) -> None:
+    if normalize_email(confirmation_email) != user.email:
+        raise ValidationFailed("Enter your account email exactly to confirm.", details={"email": "This does not match your account email."})
+    user_id = user.id
+    for model in (ExpenseDraft, Transaction, Category, Account, PasskeyCredential, AuthSession,
+                  AuthChallenge, PasswordResetToken, UserPreference, AuditEvent):
+        db.session.execute(delete(model).where(model.user_id == user_id))
+    db.session.execute(delete(User).where(User.id == user_id))
+    db.session.commit()
+    record_event("account.deleted")

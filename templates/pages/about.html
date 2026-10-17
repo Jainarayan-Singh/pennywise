@@ -1,0 +1,16 @@
+{% extends "layouts/document.html" %}
+{% block title %}About · {{ app_name }}{% endblock %}
+{% block doc_title %}About {{ app_name }}{% endblock %}
+{% block doc_body %}
+<p>{{ app_name }} is a personal income and expense tracker. You record what you earn and spend, sort it into categories and accounts, and see how each month is going.</p>
+<h2>What it does</h2>
+<ul>
+    <li>Records income and expenses with exact amounts, dates, categories, accounts, payment methods, merchants and notes.</li>
+    <li>Shows monthly totals, income against expenses, spending by category and a spending trend.</li>
+    <li>Lets you filter and search your transactions and gives totals for exactly what you selected.</li>
+    {% if ai_enabled %}<li>Offers Quick add: describe an expense by typing{% if voice_enabled %} or speaking{% endif %}, in English or Hinglish, then review it before anything is saved.</li>{% endif %}
+</ul>
+<h2>Your data</h2>
+<p>Your records belong to your account and are visible only to you. You can delete the account and all its data at any time from the Account page. See the <a href="{{ url_for('main.privacy') }}">Privacy Policy</a> and <a href="{{ url_for('main.data_deletion') }}">Data deletion</a> for details.</p>
+{% if hub_url %}<p>{{ app_name }} is one of the products listed on <a href="{{ hub_url }}">{{ hub_name }}</a>.</p>{% endif %}
+{% endblock %}

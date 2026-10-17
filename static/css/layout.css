@@ -215,6 +215,25 @@
     height: 1.25rem;
 }
 
+.app-footer__links,
+.site-footer__nav--legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+}
+
+.app-footer__links a,
+.site-footer__nav--legal a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+}
+
+.app-footer__links a:hover,
+.site-footer__nav--legal a:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+}
+
 @media (max-width: 47.99rem) {
     .app-footer {
         padding-inline: var(--space-4);

@@ -1,0 +1,19 @@
+{% extends "layouts/public.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/document.css') }}">
+{% endblock %}
+
+{% block content %}
+<main id="main-content" class="document">
+    <div class="container container--narrow">
+        <header class="document__head">
+            <h1>{% block doc_title %}{% endblock %}</h1>
+            <p class="muted small">Last updated October 2026</p>
+        </header>
+        <div class="document__body">
+            {% block doc_body %}{% endblock %}
+        </div>
+    </div>
+</main>
+{% endblock %}

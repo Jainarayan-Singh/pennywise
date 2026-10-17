@@ -33,6 +33,13 @@
         </main>
         <footer class="app-footer">
             <span class="app-footer__brand">{{ brand_logo() }}<span class="brand-name">{{ app_name }}</span></span>
+            <nav class="app-footer__links" aria-label="Legal">
+                <a href="{{ url_for('main.about') }}">About</a>
+                <a href="{{ url_for('main.privacy') }}">Privacy</a>
+                <a href="{{ url_for('main.terms') }}">Terms</a>
+                <a href="{{ url_for('main.data_deletion') }}">Data deletion</a>
+                {% if contact_email %}<a href="{{ url_for('main.contact') }}">Contact</a>{% endif %}
+            </nav>
             <span>&copy; {{ copyright_year }} <span class="brand-name">{{ app_name }}</span></span>
         </footer>
     </div>

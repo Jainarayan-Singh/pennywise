@@ -1,0 +1,28 @@
+{% extends "layouts/document.html" %}
+{% block title %}Data deletion · {{ app_name }}{% endblock %}
+{% block doc_title %}Account and data deletion{% endblock %}
+{% block doc_body %}
+<p>You can permanently delete your {{ app_name }} account yourself, at any time.</p>
+<h2>How</h2>
+<ul>
+    <li>Sign in and open <strong>Account</strong>.</li>
+    <li>Choose <strong>Delete account</strong>, type your account email to confirm and select <strong>Delete permanently</strong>.</li>
+</ul>
+<h2>What is removed</h2>
+<p>Immediately and permanently:</p>
+<ul>
+    <li>Your account, name, email address, password and passkeys.</li>
+    <li>All your transactions, categories and accounts.</li>
+    <li>Your sessions, pending sign-in links and Quick add drafts.</li>
+    <li>Your security log entries.</li>
+</ul>
+<h2>What remains</h2>
+<ul>
+    <li>A single log entry that an account was deleted, with no personal details.</li>
+    <li>Copies in backups kept by the database host, until they expire under that host's own schedule.</li>
+    <li>Emails already sent to you, which stay in your own mailbox.</li>
+</ul>
+<h2>Cannot sign in?</h2>
+<p>Use <strong>Forgot password</strong> on the sign-in page to regain access, then delete the account.{% if contact_email %} If that does not work, write to <a href="mailto:{{ contact_email }}">{{ contact_email }}</a> from the email address on the account.{% endif %}</p>
+<p>Deletion cannot be undone.</p>
+{% endblock %}

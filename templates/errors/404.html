@@ -1,23 +1,31 @@
-{% extends "layouts/public.html" %}
+{% extends "base.html" %}
 {% from "components/macros.html" import icon %}
 
-{% block title %}Page not found · {{ app_name }}{% endblock %}
+{% block title %}Error 404 · {{ app_name }}{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/not-found.css') }}">
 {% endblock %}
 
-{% block content %}
-<main id="main-content" class="not-found">
-    <div class="container not-found__inner">
-        <p class="not-found__code" aria-hidden="true">
-            <span>4</span><span class="not-found__zero">0</span><span>4</span>
-        </p>
-        <h1 class="not-found__title">Page not found</h1>
-        <p class="not-found__text">The page you're looking for doesn't exist or may have moved.</p>
-        <div class="btn-group not-found__actions">
-            <a class="btn btn--primary btn--lg" href="{{ url_for('main.landing') }}">{{ icon("home") }}Back to Home</a>
-            <button class="btn btn--secondary btn--lg" type="button" data-go-back hidden>Go back</button>
+{% block layout %}
+<div class="err-orb err-orb--1"></div>
+<div class="err-orb err-orb--2"></div>
+<div class="err-orb err-orb--3"></div>
+<div class="err-grid"></div>
+<div class="err-scanline"></div>
+<div class="err-particles" data-particles></div>
+
+<main id="main-content" class="err-scene">
+    <div class="err-card">
+        <div class="err-code-wrap" data-code="404">
+            <span class="err-code">404</span>
+        </div>
+        <div class="err-pill"><span class="err-pill__dot"></span>Not Found</div>
+        <h1 class="err-title">Page not found</h1>
+        <p class="err-text">The resource you're looking for has moved, been deleted, or never existed. Double-check the URL or head back to the platform.</p>
+        <div class="err-actions">
+            <a class="err-btn err-btn--primary" href="{{ url_for('finance_pages.dashboard_page') if current_user() else url_for('main.landing') }}">{{ icon("home") }}Back to Platform</a>
+            <button class="err-btn err-btn--ghost" type="button" data-go-back>{{ icon("arrow-left") }}Go Back</button>
         </div>
     </div>
 </main>

@@ -1,0 +1,29 @@
+{% extends "layouts/document.html" %}
+{% block title %}Privacy Policy · {{ app_name }}{% endblock %}
+{% block doc_title %}Privacy Policy{% endblock %}
+{% block doc_body %}
+<p>This page explains what {{ app_name }} stores about you, why, who else handles it, and how to remove it.</p>
+<h2>What we store</h2>
+<ul>
+    <li><strong>Account:</strong> your name and email address, and either a hashed password or the public key of each passkey you add. Passwords are never stored in readable form, and your fingerprint, face or PIN never leaves your device.</li>
+    <li><strong>Your records:</strong> the transactions, categories and accounts you create, with the amounts, dates, merchants and notes you enter.</li>
+    <li><strong>Sessions:</strong> a record of each signed-in browser so you can be signed out remotely.</li>
+    <li><strong>Security log:</strong> sign-in, sign-out and account events with the time and the IP address they came from.</li>
+    {% if ai_enabled %}<li><strong>Quick add drafts:</strong> the text of an expense you described and the draft built from it. Drafts expire shortly after you stop using them.</li>{% endif %}
+</ul>
+{% if ai_enabled %}
+<h2>AI features</h2>
+<p>When you use Quick add, the text you typed is sent to Google's Gemini API to extract the amount, date, category and other details.{% if voice_enabled %} If you use voice, your recording is sent to Gemini to be turned into text. The recording is held in memory only and is not saved or logged by {{ app_name }}.{% endif %} Nothing is saved to your transactions until you review and confirm it. If you do not use these features, nothing is sent.</p>
+{% endif %}
+<h2>Email</h2>
+<p>Sign-up and password-reset links are sent through an email delivery service. Your email address and the message pass through that service.</p>
+<h2>Cookies and browser storage</h2>
+<p>{{ app_name }} sets one session cookie to keep you signed in (HttpOnly, same-site) and uses a token to protect forms. Your browser also stores your theme and sidebar choices. There are no advertising or analytics cookies or trackers.</p>
+<h2>Sharing</h2>
+<p>We do not sell your data or share it for advertising. It is handled only by the services needed to run {{ app_name }}: the host and database provider{% if ai_enabled %}, the AI provider named above{% endif %} and the email delivery service.</p>
+<h2>How long we keep it</h2>
+<p>Your account and records are kept until you delete your account. Expired sessions and old drafts are cleared automatically.</p>
+<h2>Your choices</h2>
+<p>You can manage passkeys on the Account page, sign out of every device, and permanently delete your account and data. See <a href="{{ url_for('main.data_deletion') }}">Data deletion</a>.</p>
+{% if contact_email %}<h2>Questions</h2><p>Write to <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.</p>{% endif %}
+{% endblock %}

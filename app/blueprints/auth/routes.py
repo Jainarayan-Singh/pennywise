@@ -38,6 +38,10 @@ class ForgotBody(_Body):
     email: str
 
 
+class DeleteAccountBody(_Body):
+    email: str
+
+
 class ResetBody(_Body):
     token: str
     new_password: str
@@ -174,3 +178,14 @@ def delete_passkey(passkey_id: str):
         raise ApiError("Passkey not found.", status_code=404, code="not_found") from None
     passkey_service.remove_passkey(get_current_user(), parsed)
     return _ok({"removed": True})
+
+
+@auth_api_bp.delete("/account")
+@api_login_required
+def delete_account():
+    user = get_current_user()
+    enforce_rate_limit("delete-account", f"user:{user.id}")
+    body = parse_json_body(DeleteAccountBody)
+    auth_service.delete_account(user, body.email)
+    end_session()
+    return _ok(_session_payload(None))

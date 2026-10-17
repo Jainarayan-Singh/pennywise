@@ -24,6 +24,7 @@ def _template_globals():
         "app_name": settings.app.name,
         "hub_url": settings.app.hub_url if settings.app.hub_url.startswith(("https://", "http://localhost")) else "",
         "hub_name": settings.app.hub_name,
+        "contact_email": settings.app.contact_email,
         "brand_css_version": _brand_stylesheet()["version"],
         "brand_font_preload": _brand_stylesheet()["preload"],
         "copyright_year": settings.app.copyright_year,
@@ -67,6 +68,33 @@ def brand_css():
 @main_bp.get("/")
 def landing():
     return render_template("index.html")
+
+
+@main_bp.get("/about")
+def about():
+    return render_template("pages/about.html")
+
+
+@main_bp.get("/privacy")
+def privacy():
+    return render_template("pages/privacy.html")
+
+
+@main_bp.get("/terms")
+def terms():
+    return render_template("pages/terms.html")
+
+
+@main_bp.get("/data-deletion")
+def data_deletion():
+    return render_template("pages/data_deletion.html")
+
+
+@main_bp.get("/contact")
+def contact():
+    if not current_app.extensions["settings"].app.contact_email:
+        abort(404)
+    return render_template("pages/contact.html")
 
 
 @main_bp.get("/diagnostics")

@@ -1,5 +1,5 @@
 {% extends "layouts/app.html" %}
-{% from "components/macros.html" import icon %}
+{% from "components/macros.html" import icon, field, form_dialog %}
 
 {% block content_class %}app-content--narrow{% endblock %}
 
@@ -47,6 +47,21 @@
         </div>
     </div>
 </section>
+
+<section class="card card--stack" aria-labelledby="delete-heading">
+    <div>
+        <h2 id="delete-heading">Delete account</h2>
+        <p class="muted small">Permanently removes your account and everything in it: transactions, categories, accounts, passkeys and sessions. This cannot be undone.</p>
+    </div>
+    <div class="btn-group">
+        <button id="delete-account-button" class="btn btn--danger" type="button">{{ icon("trash") }}Delete account</button>
+    </div>
+</section>
+
+{% call form_dialog("delete-account-dialog", "Delete your account?", submit_label="Delete permanently", size="modal--sm", tone="danger") %}
+<p class="muted">All your data is erased immediately and cannot be recovered.</p>
+{{ field("delete-account", "email", "Type your email to confirm", type="email", autocomplete="off") }}
+{% endcall %}
 {% endblock %}
 
 {% block scripts %}

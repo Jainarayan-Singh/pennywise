@@ -77,7 +77,7 @@
 {% endmacro %}
 
 {# The one modal used for every form: centred, scrolls inside, Cancel/Save footer. Ids derive from `id`. #}
-{% macro form_dialog(id, title, submit_label="Save", size="") %}
+{% macro form_dialog(id, title, submit_label="Save", size="", tone="primary") %}
 <dialog id="{{ id }}" class="modal {{ size }}" aria-labelledby="{{ id }}-title">
     <form id="{{ id }}-form" class="modal__form" novalidate>
         <div class="modal__header">
@@ -90,7 +90,7 @@
         </div>
         <div class="modal__footer">
             <button class="btn btn--secondary" type="button" data-dialog-close>Cancel</button>
-            <button class="btn btn--primary" type="submit">{{ submit_label }}</button>
+            <button class="btn btn--{{ tone }}" type="submit">{{ submit_label }}</button>
         </div>
     </form>
 </dialog>
