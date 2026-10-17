@@ -9,6 +9,7 @@
 
 .brand {
     display: inline-flex;
+    flex: none;
     min-width: 0; /* lets a long name give way instead of pushing the page wider than the screen */
     align-items: center;
     gap: var(--space-2);
@@ -54,15 +55,10 @@
     }
 }
 
-@media (max-width: 47.99rem) {
-    .site-header__hub-name {
-        display: none;
-    }
-}
-
 .brand__video {
     display: block;
     flex: none;
+    max-width: none;
     width: auto;
     height: 2.125rem;
 }
@@ -124,6 +120,24 @@
 
 @media (max-width: 29.99rem) {
     .btn.site-header__get-started {
+        display: none;
+    }
+
+    .site-header__inner {
+        gap: var(--space-2);
+    }
+
+    .site-header__actions {
+        gap: var(--space-1);
+    }
+
+    .site-header .brand__video {
+        height: 1.75rem;
+    }
+}
+
+@media (max-width: 22.5rem) {
+    .btn.site-header__signin {
         display: none;
     }
 }

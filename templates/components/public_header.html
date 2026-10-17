@@ -9,12 +9,12 @@
             <a href="{{ url_for('main.landing') }}#how-it-works">How it works</a>
         </nav>
         <div class="site-header__actions">
-            {% if hub_url %}<a class="btn btn--ghost btn--sm site-header__hub" href="{{ hub_url }}" aria-label="Back to {{ hub_name }}">&larr;<span class="site-header__hub-name"> {{ hub_name }}</span></a>{% endif %}
+            {% if hub_url %}<a class="btn btn--ghost btn--sm site-header__hub" href="{{ hub_url }}">&larr; {{ hub_name }}</a>{% endif %}
             {{ theme_menu() }}
             {% if current_user() %}
             <a class="btn btn--primary btn--sm" href="{{ url_for('finance_pages.dashboard_page') }}">Dashboard</a>
             {% else %}
-            <a class="btn btn--ghost btn--sm" href="{{ url_for('auth_pages.login_page') }}">Sign in</a>
+            <a class="btn btn--ghost btn--sm site-header__signin" href="{{ url_for('auth_pages.login_page') }}">Sign in</a>
             <a class="btn btn--primary btn--sm site-header__get-started" href="{{ url_for('auth_pages.login_page', tab='register') }}">Get started</a>
             {% endif %}
         </div>
