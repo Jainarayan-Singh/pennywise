@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "components/macros.html" import icon, brand_logo, brand_video, theme_menu %}
+{% from "components/macros.html" import icon, brand_video, theme_menu %}
 
 {% block title %}{{ self.page_title() }} · {{ app_name }}{% endblock %}
 {% block body_attrs %}data-authenticated{% endblock %}
@@ -32,7 +32,7 @@
             {% block content %}{% endblock %}
         </main>
         <footer class="app-footer">
-            <span class="app-footer__brand">{{ brand_logo() }}<span class="brand-name">{{ app_name }}</span></span>
+            <span class="app-footer__brand">{{ brand_video(app_name) }}</span>
             <nav class="app-footer__links" aria-label="Legal">
                 <a href="{{ url_for('main.about') }}">About</a>
                 <a href="{{ url_for('main.privacy') }}">Privacy</a>
