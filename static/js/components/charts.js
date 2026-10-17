@@ -23,7 +23,6 @@ export function niceScale(maxValue, ticks = 4) {
     return { step, max: step * Math.ceil(max / step) };
 }
 
-// ---------- tooltip (one shared element, positioned with CSS custom properties) ----------
 
 const tip = document.createElement("div");
 tip.className = "chart-tip";
@@ -72,7 +71,6 @@ function wireTip(target, title, rows, anchor = target) {
     target.addEventListener("blur", hideTip);
 }
 
-// ---------- count-up for summary figures ----------
 
 /** Show `finalAmount` (a decimal string) in `element`, counting up from `from` unless motion is reduced. */
 export function countUp(element, finalAmount, { currency, locale, from = 0, duration = 800 }) {
@@ -93,7 +91,6 @@ export function countUp(element, finalAmount, { currency, locale, from = 0, dura
     setTimeout(() => { element.textContent = exact; }, duration + 60); // exact figure even if frames are throttled
 }
 
-// ---------- shared axis helpers ----------
 
 function drawYAxis(svg, { scale, left, right, top, bottom, locale }) {
     const compact = new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 });
@@ -112,7 +109,6 @@ function monthLabel(month, locale, style) {
         .format(new Date(year, number - 1, 1));
 }
 
-// ---------- income vs expenses, month by month ----------
 
 export function renderBars(container, { months, currency, locale, animate = true }) {
     const width = Math.max(container.clientWidth, 260);
@@ -161,7 +157,6 @@ export function renderBars(container, { months, currency, locale, animate = true
     container.replaceChildren(svg);
 }
 
-// ---------- spending trend (area) ----------
 
 export function renderTrend(container, { points, granularity, currency, locale, animate = true }) {
     const width = Math.max(container.clientWidth, 260);
@@ -251,7 +246,6 @@ export function renderTrend(container, { points, granularity, currency, locale, 
     container.replaceChildren(svg);
 }
 
-// ---------- spending by category (donut + legend) ----------
 
 export function renderDonut(container, { categories, total, currency, locale }) {
     const money = (amount) => formatMoney(amount, currency, locale);

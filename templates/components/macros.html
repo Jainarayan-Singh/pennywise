@@ -2,6 +2,10 @@
 <svg class="icon {{ class }}" aria-hidden="true" focusable="false"><use href="#i-{{ name }}"></use></svg>
 {%- endmacro %}
 
+{% macro brand_video(name) -%}
+<video class="brand__video" src="{{ url_for('static', filename='logo.mp4') }}" autoplay loop muted playsinline aria-label="{{ name }}"></video>
+{%- endmacro %}
+
 {# The brand logo (static/favicon.png); decorative because the app name always sits beside it. #}
 {% macro brand_logo(class="") -%}
 <img class="brand__logo {{ class }}" src="{{ url_for('static', filename='favicon.png') }}" alt="" width="40" height="40">

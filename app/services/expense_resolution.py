@@ -48,7 +48,6 @@ def resolve(user: User, fields: dict, extraction: intent.Extraction, raw_text: s
     _resolve_payment_method(fields, active_accounts)
 
 
-# --- type -----------------------------------------------------------------------------------
 
 
 def _resolve_type(fields: dict, raw_text: str) -> None:
@@ -58,7 +57,6 @@ def _resolve_type(fields: dict, raw_text: str) -> None:
         f.put(fields, "transaction_type", kind, "inferred", "from your wording")
 
 
-# --- category -------------------------------------------------------------------------------
 
 
 def _by_name(items, name: str | None):
@@ -120,7 +118,6 @@ def _category_from_history(user: User, merchant: str, kind: str | None) -> Categ
     return category if ok and (kind is None or category.kind == kind) else None
 
 
-# --- account --------------------------------------------------------------------------------
 
 
 def accounts_mentioned(text: str | None, accounts: list[Account]) -> list[Account]:
@@ -214,7 +211,6 @@ def _account_from_history(user: User, fields: dict, accounts: list[Account]) -> 
     return None
 
 
-# --- payment method -------------------------------------------------------------------------
 
 
 def _resolve_payment_method(fields: dict, accounts: list[Account]) -> None:

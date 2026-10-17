@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
+from pathlib import Path
 
 from flask import Flask
 from sqlalchemy import event
@@ -35,7 +36,13 @@ def create_app(settings: Settings | None = None) -> Flask:
     settings = settings or Settings.from_env()
     configure_logging(settings.app.log_level)
 
-    app = Flask(__name__, instance_relative_config=True)
+    root = Path(__file__).resolve().parent.parent
+    app = Flask(
+        __name__,
+        instance_relative_config=True,
+        static_folder=str(root / "static"),
+        template_folder=str(root / "templates"),
+    )
     app.extensions["settings"] = settings
     app.config.update(
         SECRET_KEY=settings.app.secret_key,

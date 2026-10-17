@@ -36,7 +36,6 @@ const shown = new Map(); // last figure on each tile, so the next update counts 
 
 const money = (amount, currency = state.data?.currency) => formatMoney(amount, currency, locale);
 
-// ---------- summary tiles ----------
 
 function buildTiles() {
     els.stats.replaceChildren();
@@ -95,7 +94,6 @@ function renderTiles(data) {
     }
 }
 
-// ---------- charts ----------
 
 function renderCharts(animate) {
     const { data } = state;
@@ -137,7 +135,6 @@ const observer = new ResizeObserver((entries) => {
 observer.observe(els.bars);
 observer.observe(els.trend);
 
-// ---------- recent transactions ----------
 
 function renderRecent(items) {
     if (items.length === 0) {
@@ -164,7 +161,6 @@ function renderRecent(items) {
     els.recent.replaceChildren(list);
 }
 
-// ---------- page ----------
 
 function syncFilters(data) {
     setSelectValue(els.range, data.range.key);

@@ -1,9 +1,8 @@
-{% from "components/macros.html" import icon, brand_logo, theme_menu %}
+{% from "components/macros.html" import icon, brand_video, theme_menu %}
 <header class="site-header">
     <div class="container site-header__inner">
         <a class="brand" href="{{ url_for('main.landing') }}">
-            {{ brand_logo() }}
-            <span class="brand-name">{{ app_name }}</span>
+            {{ brand_video(app_name) }}
         </a>
         <nav class="site-nav" aria-label="Sections">
             <a href="{{ url_for('main.landing') }}#features">Features</a>

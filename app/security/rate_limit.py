@@ -1,6 +1,6 @@
 """In-process sliding-window rate limiter.
 
-Limitation (documented in docs/SECURITY.md): state is per process, so with N
+Limitation: state is per process, so with N
 worker processes the effective limit is N times higher. Swap the store for a
 shared one if you deploy multiple workers.
 """

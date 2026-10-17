@@ -36,3 +36,7 @@ window.addEventListener("pageshow", async (event) => {
         // Offline: leave the page; any action will be rejected by the server anyway.
     }
 });
+
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll(".brand__video").forEach((video) => video.pause());
+}

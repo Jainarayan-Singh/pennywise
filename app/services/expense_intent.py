@@ -22,7 +22,6 @@ from app.utils.errors import ValidationFailed
 
 MAX_INPUT_CHARS = 500
 
-# --- AI extraction --------------------------------------------------------------------------
 
 _NULLABLE_TEXT = {"type": "string", "nullable": True}
 EXTRACTION_SCHEMA = {
@@ -115,7 +114,6 @@ def extract(provider: AIProvider, text: str, *, current_draft: dict | None = Non
         raise AIInvalidResponse("schema mismatch") from None
 
 
-# --- amounts and currency -------------------------------------------------------------------
 
 _MULTIPLIERS = {
     "k": 1_000, "thousand": 1_000, "hazar": 1_000, "hazaar": 1_000,
@@ -190,7 +188,6 @@ def detect_type(text: str) -> Literal["expense", "income"] | None:
     return "expense" if expense else "income"
 
 
-# --- dates ----------------------------------------------------------------------------------
 
 DateStatus = Literal["resolved", "ambiguous", "unparsed", "future"]
 
@@ -310,7 +307,6 @@ def resolve_date_phrase(phrase: str, today: date, *, day_first: bool = True) -> 
     return DateResolution("unparsed")
 
 
-# --- categories -----------------------------------------------------------------------------
 
 _CATEGORY_SYNONYMS = {
     "Food & Dining": ("food", "lunch", "dinner", "breakfast", "snack", "snacks", "chai", "tea", "coffee", "restaurant", "meal", "eating", "cafe", "dining"),

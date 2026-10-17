@@ -54,6 +54,17 @@
     }
 }
 
+.brand__video {
+    display: block;
+    flex: none;
+    width: auto;
+    height: 2.125rem;
+}
+
+.site-footer .brand__video {
+    height: 1.75rem;
+}
+
 .brand__logo {
     flex: none;
     width: 2rem;
@@ -61,8 +72,6 @@
     border-radius: var(--radius-sm);
     object-fit: contain;
 }
-
-/* Public pages: simple header and footer */
 
 .site-header {
     position: sticky;
@@ -533,8 +542,6 @@
         transition: none;
     }
 }
-
-/* Page building blocks */
 
 .toolbar-row {
     display: flex;

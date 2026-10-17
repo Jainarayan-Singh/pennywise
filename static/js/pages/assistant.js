@@ -47,7 +47,6 @@ const storage = {
     clear: () => { try { sessionStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ } },
 };
 
-// ---------- conversation ----------
 
 function bubble(kind, text) {
     const element = document.createElement("div");
@@ -112,7 +111,6 @@ function askQuestion(draft) {
     els.conversation.scrollTop = els.conversation.scrollHeight;
 }
 
-// ---------- draft card ----------
 
 function displayValue(row, currency) {
     if (row.value === null) return null;
@@ -179,7 +177,6 @@ function resetAssistant({ keepConversation = false } = {}) {
     els.text.focus();
 }
 
-// ---------- sending ----------
 
 function setComposerBusy(busy) {
     els.text.disabled = busy;
@@ -223,7 +220,6 @@ async function submit(text) {
     }
 }
 
-// ---------- confirm / discard ----------
 
 async function confirmDraft() {
     els.confirm.disabled = true;
@@ -282,7 +278,6 @@ async function discardDraft() {
     }
 }
 
-// ---------- edit details ----------
 
 async function loadLookups() {
     if (!state.lookups) {
@@ -361,7 +356,6 @@ async function saveEdit(event) {
     }
 }
 
-// ---------- voice ----------
 
 const consent = {
     given: () => { try { return localStorage.getItem(CONSENT_KEY) === "1"; } catch { return false; } },
@@ -455,7 +449,6 @@ if (voiceFlag === "true") {
     }
 }
 
-// ---------- events and resume ----------
 
 els.text.value = ""; // browsers restore typed text on reload; the sent message belongs to the draft, not the box
 els.composer.addEventListener("submit", send);

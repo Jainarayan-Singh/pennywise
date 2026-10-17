@@ -14,8 +14,6 @@
     min-height: 2.5rem;
 }
 
-/* Toolbar and layout */
-
 .dash-toolbar {
     display: flex;
     flex-wrap: wrap;
@@ -77,8 +75,6 @@
         grid-template-columns: minmax(0, 1fr);
     }
 }
-
-/* Summary tiles */
 
 .stat-tile {
     --tile: var(--color-primary);
@@ -144,8 +140,6 @@
 
 .stat-tile__note.is-good { color: var(--color-success); }
 .stat-tile__note.is-bad { color: var(--color-danger); }
-
-/* Chart cards */
 
 .chart-card {
     container: chart-card / inline-size;
@@ -264,8 +258,6 @@
 .chart--static .chart__area {
     animation: none;
 }
-
-/* Donut and legend */
 
 /* The card, not the viewport, decides: the ring sits beside its legend only when the card is wide enough. */
 .donut {
@@ -452,8 +444,6 @@
     margin-left: auto;
     padding-left: var(--space-3);
 }
-
-/* Recent transactions */
 
 .activity {
     margin: 0;

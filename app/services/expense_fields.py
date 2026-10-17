@@ -49,7 +49,6 @@ def clean_text(raw: str | None, limit: int) -> str | None:
     return text[:limit] or None
 
 
-# --- bookkeeping: how often each field was asked about, and which accounts are still plausible ---
 
 
 def times_asked(fields: dict, key: str) -> int:

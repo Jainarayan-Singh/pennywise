@@ -60,7 +60,6 @@ def _ensure_currency(user: User, fields: dict, accounts: list) -> None:
     f.put(fields, "currency", account.currency if account else user.preferences.currency, "default")
 
 
-# --- merging what the user said -------------------------------------------------------------
 
 
 def _merge_explicit(user: User, fields: dict, ex: intent.Extraction) -> tuple[str, str] | None:
@@ -156,7 +155,6 @@ def _direct_answer(user: User, fields: dict, pending: str | None, text: str) -> 
     return None
 
 
-# --- lifecycle ------------------------------------------------------------------------------
 
 
 def _touch(draft: ExpenseDraft, settings: Settings) -> None:
@@ -336,7 +334,6 @@ def confirm_draft(user: User, draft_id: uuid.UUID):
     return draft, txn, created
 
 
-# --- presentation ---------------------------------------------------------------------------
 
 _KNOWN_SOURCES = {"explicit", "rule"}
 

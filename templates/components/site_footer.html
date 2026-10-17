@@ -1,10 +1,9 @@
-{% from "components/macros.html" import brand_logo %}
+{% from "components/macros.html" import brand_video %}
 <footer class="site-footer">
     <div class="container">
         <div class="site-footer__row">
             <a class="brand" href="{{ url_for('main.landing') }}">
-                {{ brand_logo() }}
-                <span class="brand-name">{{ app_name }}</span>
+                {{ brand_video(app_name) }}
             </a>
             <nav class="site-footer__nav" aria-label="Footer">
                 <a href="{{ url_for('main.landing') }}#features">Features</a>

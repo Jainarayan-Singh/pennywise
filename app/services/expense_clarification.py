@@ -89,7 +89,6 @@ def _money_label(fields: dict) -> str:
     return f"{symbol}{text}" if symbol else f"{currency} {text}".strip()
 
 
-# --- optional fields: asked once, from the user's own options ---------------------------------
 
 
 def _next_optional(fields: dict, categories: list[Category], accounts: list[Account]) -> str | None:

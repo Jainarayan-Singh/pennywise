@@ -167,8 +167,6 @@
     font-size: var(--text-sm);
 }
 
-/* Date picker */
-
 .datepicker {
     display: flex;
     gap: var(--space-2);
